@@ -375,57 +375,59 @@ export default function AdminDashboardPage() {
     <div className="min-h-screen bg-[#F8F7F4] text-gray-900 pb-20">
       {/* Top Navbar */}
       <header className="bg-white border-b border-[#EAE6DF] sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/" target="_blank" className="hover:opacity-85 transition-opacity flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <Link href="/" target="_blank" className="hover:opacity-85 transition-opacity flex items-center gap-2 sm:gap-3 min-w-0">
               <div
-                style={{ width: '42px', height: '42px', minWidth: '42px', minHeight: '42px' }}
+                style={{ width: '38px', height: '38px', minWidth: '38px', minHeight: '38px' }}
                 className="rounded-full overflow-hidden flex items-center justify-center bg-white shadow-xs border border-stone-200 flex-shrink-0"
               >
                 <img
                   src="/logo.png"
                   alt="Sai Praveen Jewellery"
-                  style={{ width: '42px', height: '42px', maxWidth: '42px', maxHeight: '42px', objectFit: 'contain' }}
+                  style={{ width: '38px', height: '38px', maxWidth: '38px', maxHeight: '38px', objectFit: 'contain' }}
                   className="block rounded-full"
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="font-serif font-bold text-gray-900 text-base leading-tight tracking-tight">
+              <div className="flex flex-col min-w-0 justify-center">
+                <span className="font-serif font-bold text-gray-900 text-xs sm:text-base leading-tight tracking-tight whitespace-nowrap">
                   Sai Praveen Jewellery
                 </span>
-                <span className="text-[10px] font-semibold text-[#C59B27] uppercase tracking-wider">
+                <span className="text-[9px] sm:text-[10px] font-semibold text-[#C59B27] uppercase tracking-wider whitespace-nowrap">
                   Admin Portal
                 </span>
               </div>
             </Link>
           </div>
 
-          <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
             {/* Gold/Silver Prices Button */}
             <button
               onClick={handleOpenRatesModal}
-              className="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200/90 text-amber-900 text-xs sm:text-sm font-semibold rounded-xl flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+              className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200/90 text-amber-900 text-xs sm:text-sm font-semibold rounded-xl flex items-center gap-1 sm:gap-1.5 transition-all shadow-xs cursor-pointer whitespace-nowrap"
               title="Manage daily market gold & silver rates"
             >
-              <Coins className="w-4 h-4 text-amber-700" />
-              <span>Gold/Silver Prices</span>
+              <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 flex-shrink-0" />
+              <span className="hidden sm:inline">Gold/Silver Prices</span>
+              <span className="sm:hidden">Prices</span>
             </button>
 
             <Link
               href="/admin/add"
               style={{ color: '#ffffff' }}
-              className="px-4 py-2 bg-[#C8102E] hover:bg-[#A00D24] !text-white text-xs sm:text-sm font-semibold rounded-xl shadow-md shadow-[#C8102E]/20 flex items-center gap-1.5 transition-all cursor-pointer"
+              className="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-[#C8102E] hover:bg-[#A00D24] !text-white text-xs sm:text-sm font-semibold rounded-xl shadow-md shadow-[#C8102E]/20 flex items-center gap-1 sm:gap-1.5 transition-all cursor-pointer whitespace-nowrap"
             >
-              <Plus className="w-4 h-4 !text-white" style={{ color: '#ffffff', stroke: '#ffffff' }} />
-              <span className="!text-white" style={{ color: '#ffffff' }}>Add Product</span>
+              <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 !text-white flex-shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+              <span className="!text-white hidden sm:inline" style={{ color: '#ffffff' }}>Add Product</span>
+              <span className="!text-white sm:hidden" style={{ color: '#ffffff' }}>Add</span>
             </Link>
 
             <button
               onClick={handleLogout}
               title="Logout"
-              className="w-9 h-9 rounded-xl border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors cursor-pointer"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors cursor-pointer flex-shrink-0"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           </div>
         </div>

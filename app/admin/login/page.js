@@ -126,7 +126,7 @@ export default function AdminLoginPage() {
 
         {/* Card Footer Strip */}
         <div className="bg-[#FAF7F0] py-3.5 text-center text-xs text-stone-500 font-medium border-t border-[#EAE3D4]">
-          Sri Kankatala Jewellers Admin Portal
+          Sai Praveen Jewellery Admin Portal
         </div>
       </div>
     </div>
