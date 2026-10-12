@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 
 export const metadata = {
-  title: 'Privacy Policy | Sri Kankatala Jewellers',
-  description: 'Privacy Policy for Sri Kankatala Jewellers.',
+  title: 'Privacy Policy | Sai Praveen Jewellery',
+  description: 'Privacy Policy for Sai Praveen Jewellery.',
 };
 
 export default function PrivacyPolicyPage() {
@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
         
         <div className="prose prose-skj max-w-none text-skj-muted space-y-6 text-sm sm:text-base leading-relaxed">
           <p>
-            At Sri Kankatala Jewellers, we take your privacy seriously. This Privacy Policy outlines how we collect, use, and protect your personal information when you interact with our store, website, and WhatsApp services.
+            At Sai Praveen Jewellery, we take your privacy seriously. This Privacy Policy outlines how we collect, use, and protect your personal information when you interact with our store, website, and WhatsApp services.
           </p>
 
           <h2 className="text-xl font-semibold text-skj-charcoal mt-10 mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>

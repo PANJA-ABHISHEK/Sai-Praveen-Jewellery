@@ -14,7 +14,7 @@ const testimonials = [
     initial: 'P',
     color: 'bg-blue-600',
     time: 'a year ago',
-    text: 'Sri Kankatala Jewellers creates stunning, high-quality pieces that truly stand out. Their craftsmanship is impeccable, and the staff is friendly and attentive. Every piece I bought exceeded my expectations in beauty and value. Highly recommend for anyone seeking elegant and worthy jewellery that lasts a lifetime',
+    text: 'Sai Praveen Jewellery creates stunning, high-quality pieces that truly stand out. Their craftsmanship is impeccable, and the staff is friendly and attentive. Every piece I bought exceeded my expectations in beauty and value. Highly recommend for anyone seeking elegant and worthy jewellery that lasts a lifetime.',
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const testimonials = [
     initial: 'D',
     color: 'bg-indigo-700',
     time: '2 weeks ago',
-    text: 'Sri Kankatala jewellers is the good looking premium gold jewellery store in Ravulapalem owner Satish is good at gold/ silver business !hope every customer visit the store and give prepaid jewellery orders at market best price on making charges (I bought good collections for my family and friends )keep connect and support Tq',
+    text: 'Sai Praveen Jewellery is the good looking premium gold jewellery store in Ravulapalem! Hope every customer visits the store and gives jewellery orders at market best prices on making charges. I bought good collections for my family and friends.',
   },
   {
     id: 3,
@@ -46,7 +46,7 @@ const testimonials = [
     initial: 'I',
     color: 'bg-green-600',
     time: '3 years ago',
-    text: 'Very good collection in ravulapalem if you models and you want good quality means you go for sri kankatala jewellers.',
+    text: 'Very good collection in Ravulapalem! If you want gorgeous designs and pure hallmark quality, you should definitely go for Sai Praveen Jewellery.',
   },
 ];
 

@@ -355,18 +355,18 @@ export default function AddProductPage() {
 
             <div className="hidden sm:flex items-center gap-2.5">
               <div
-                style={{ width: '38px', height: '38px', minWidth: '38px', minHeight: '38px' }}
+                style={{ width: '40px', height: '40px', minWidth: '40px', minHeight: '40px' }}
                 className="rounded-full overflow-hidden flex items-center justify-center bg-white shadow-xs border border-gray-100 flex-shrink-0"
               >
                 <img
-                  src="/SKJlogo.png"
-                  alt="SKJ Logo"
-                  style={{ width: '38px', height: '38px', maxWidth: '38px', maxHeight: '38px', objectFit: 'contain' }}
-                  className="block"
+                  src="/logo.png"
+                  alt="Sai Praveen Jewellery"
+                  style={{ width: '40px', height: '40px', maxWidth: '40px', maxHeight: '40px', objectFit: 'contain' }}
+                  className="block rounded-full"
                 />
               </div>
               <span className="font-serif font-semibold text-gray-800 text-sm">
-                Sri Kankatala Jewellers
+                Sai Praveen Jewellery
               </span>
             </div>
           </div>

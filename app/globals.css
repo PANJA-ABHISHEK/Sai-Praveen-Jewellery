@@ -2,21 +2,30 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════
-   Sri Kankatala Jewellers — Global Styles
-   Brand identity derived from the official SKJ logo
+   Sai Praveen Jewellery (SPJ) — Global Styles
+   Brand identity derived from the official SPJ logo
    ═══════════════════════════════════════════════════ */
 
 @theme {
-  /* SKJ Brand Colours */
-  --color-skj-red: #FD0100;
-  --color-skj-olive: #5F5F01;
-  --color-skj-deep-olive: #343500;
-  --color-skj-gold: #C9A34A;
-  --color-skj-ivory: #FFF9EC;
-  --color-skj-charcoal: #292821;
-  --color-skj-muted: #74746C;
-  --color-skj-border: #E7E0D2;
+  /* SPJ Brand Colours (Regal Gold, Obsidian Black, Champagne Pearl) */
+  --color-skj-red: #C41E3A;
+  --color-skj-olive: #C59B27; /* Royal 22K Gold */
+  --color-skj-deep-olive: #121212; /* Obsidian Luxury Black */
+  --color-skj-gold: #DFB235; /* Radiant Accent Gold */
+  --color-skj-ivory: #FDFBF7; /* Champagne Pearl */
+  --color-skj-charcoal: #141414; /* Deep Obsidian Charcoal */
+  --color-skj-muted: #6E6B65;
+  --color-skj-border: #EADBCA; /* Warm Gold Hairline */
   --color-skj-white: #FFFFFF;
+
+  /* Aliases for SPJ */
+  --color-spj-red: #C41E3A;
+  --color-spj-gold: #C59B27;
+  --color-spj-accent-gold: #DFB235;
+  --color-spj-black: #121212;
+  --color-spj-ivory: #FDFBF7;
+  --color-spj-charcoal: #141414;
+  --color-spj-border: #EADBCA;
 
   /* Fonts */
   --font-heading: 'Playfair Display', 'Georgia', serif;
@@ -87,7 +96,7 @@ img {
 
 /* Focus ring for keyboard navigation */
 :focus-visible {
-  outline: 2px solid #5F5F01;
+  outline: 2px solid #C59B27;
   outline-offset: 2px;
 }
 
@@ -97,16 +106,16 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  background: #FFF9EC;
+  background: #FDFBF7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C9A34A;
+  background: #C59B27;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5F5F01;
+  background: #A67F19;
 }
 
 /* ═══════════════════════════════════════
@@ -187,7 +196,7 @@ img {
   display: block;
   width: 60px;
   height: 2px;
-  background: linear-gradient(90deg, #5F5F01, #C9A34A);
+  background: linear-gradient(90deg, #121212, #C59B27, #121212);
   margin: 0.75rem auto 1.5rem;
   border-radius: 1px;
 }
@@ -204,20 +213,23 @@ img {
   font-weight: 600;
   letter-spacing: 0.025em;
   text-transform: uppercase;
-  color: #FFFFFF;
-  background-color: #5F5F01;
+  color: #121212;
+  background: linear-gradient(135deg, #E5B842 0%, #C59B27 100%);
   border: none;
   cursor: pointer;
   border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(197, 155, 39, 0.25);
   transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-  background-color: #343500;
+  background: linear-gradient(135deg, #F0C654 0%, #D4A832 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(197, 155, 39, 0.38);
 }
 
 .btn-primary:focus-visible {
-  outline: 2px solid #5F5F01;
+  outline: 2px solid #C59B27;
   outline-offset: 2px;
 }
 
@@ -232,17 +244,19 @@ img {
   font-weight: 600;
   letter-spacing: 0.025em;
   text-transform: uppercase;
-  color: #5F5F01;
+  color: #C59B27;
   background-color: transparent;
-  border: 1.5px solid #5F5F01;
+  border: 1.5px solid #C59B27;
   cursor: pointer;
   border-radius: 9999px;
   transition: all 0.3s ease;
 }
 
 .btn-secondary:hover {
-  background-color: #5F5F01;
-  color: #FFFFFF;
+  background-color: #121212;
+  border-color: #121212;
+  color: #DFB235;
+  transform: translateY(-1px);
 }
 
 .btn-whatsapp {
@@ -269,11 +283,11 @@ img {
 
 /* Product image placeholder */
 .product-image-placeholder {
-  background: linear-gradient(135deg, #FFF9EC 0%, #E7E0D2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #EADBCA 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #C9A34A;
+  color: #C59B27;
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 2rem;
 }
@@ -284,14 +298,15 @@ img {
   bottom: 1.5rem;
   right: 1.5rem;
   padding: 0.875rem 1.5rem;
-  background-color: #343500;
+  background-color: #121212;
+  border: 1px solid #C59B27;
   color: #FFFFFF;
   font-size: 0.875rem;
   font-weight: 500;
-  border-radius: 4px;
+  border-radius: 8px;
   z-index: 9999;
   animation: slideUp 0.3s ease-out;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 @keyframes slideUp {

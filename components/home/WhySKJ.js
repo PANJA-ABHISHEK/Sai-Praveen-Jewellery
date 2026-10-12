@@ -43,13 +43,13 @@ export default function WhySKJ() {
               className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-skj-charcoal mb-6 leading-[1.15]"
               style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
-              Why Sri Kankatala
+              Why Sai Praveen
               <br />
-              Jewellers?
+              Jewellery?
             </h2>
             <div className="space-y-5 text-sm sm:text-base text-skj-muted leading-relaxed mb-10">
               <p>
-                At Sri Kankatala Jewellers, we bring together the rich tradition of Indian
+                At Sai Praveen Jewellery, we bring together the rich tradition of Indian
                 jewellery-making with a commitment to quality and customer satisfaction that
                 defines everything we do.
               </p>

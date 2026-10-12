@@ -379,21 +379,21 @@ export default function AdminDashboardPage() {
           <div className="flex items-center gap-3">
             <Link href="/" target="_blank" className="hover:opacity-85 transition-opacity flex items-center gap-3">
               <div
-                style={{ width: '40px', height: '40px', minWidth: '40px', minHeight: '40px' }}
+                style={{ width: '42px', height: '42px', minWidth: '42px', minHeight: '42px' }}
                 className="rounded-full overflow-hidden flex items-center justify-center bg-white shadow-xs border border-stone-200 flex-shrink-0"
               >
                 <img
-                  src="/SKJlogo.png"
-                  alt="SKJ Logo"
-                  style={{ width: '40px', height: '40px', maxWidth: '40px', maxHeight: '40px', objectFit: 'contain' }}
-                  className="block"
+                  src="/logo.png"
+                  alt="Sai Praveen Jewellery"
+                  style={{ width: '42px', height: '42px', maxWidth: '42px', maxHeight: '42px', objectFit: 'contain' }}
+                  className="block rounded-full"
                 />
               </div>
               <div className="flex flex-col">
                 <span className="font-serif font-bold text-gray-900 text-base leading-tight tracking-tight">
-                  Sri Kankatala Jewellers
+                  Sai Praveen Jewellery
                 </span>
-                <span className="text-[10px] font-semibold text-[#8B0000] uppercase tracking-wider">
+                <span className="text-[10px] font-semibold text-[#C59B27] uppercase tracking-wider">
                   Admin Portal
                 </span>
               </div>

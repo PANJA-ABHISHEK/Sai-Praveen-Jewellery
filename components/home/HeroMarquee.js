@@ -29,10 +29,10 @@ export default function HeroMarquee() {
       </div>
 
       {/* Small ivory gap between curve and marquee */}
-      <div className="w-full h-1.5 sm:h-2 lg:h-3 bg-[#FFF9EC]"></div>
+      <div className="w-full h-1.5 sm:h-2 lg:h-3 bg-[#FDFBF7]"></div>
 
       {/* Marquee Bar */}
-      <div className="w-full bg-[#3B4210] text-white py-3 overflow-hidden">
+      <div className="w-full bg-[#121212] border-y border-[#C59B27]/20 text-white py-3 overflow-hidden">
         <div className="flex whitespace-nowrap animate-marquee items-center">
           {/* Duplicate features array to create a seamless loop */}
           {[...features, ...features, ...features].map((feature, index) => (

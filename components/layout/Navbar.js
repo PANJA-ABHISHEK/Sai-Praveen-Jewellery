@@ -131,17 +131,25 @@ export default function Navbar() {
             {/* Logo */}
             <Link
               href="/"
-              className="flex-shrink-0 relative"
-              aria-label="Sri Kankatala Jewellers — Home"
+              className="flex items-center gap-3 flex-shrink-0 relative group"
+              aria-label="Sai Praveen Jewellery — Home"
             >
               <Image
-                src="/SKJlogo.png"
-                alt="Sri Kankatala Jewellers Logo"
-                width={scrolled ? 52 : 64}
-                height={scrolled ? 52 : 64}
-                className="transition-all duration-300 w-12 h-12 lg:w-16 lg:h-16 object-contain"
+                src="/logo.png"
+                alt="Sai Praveen Jewellery Logo"
+                width={scrolled ? 48 : 58}
+                height={scrolled ? 48 : 58}
+                className="transition-all duration-300 w-11 h-11 lg:w-14 lg:h-14 object-contain rounded-full shadow-sm"
                 priority
               />
+              <div className="flex flex-col">
+                <span className="font-heading font-bold text-skj-charcoal text-base lg:text-lg tracking-wider leading-tight group-hover:text-skj-olive transition-colors">
+                  SAI PRAVEEN
+                </span>
+                <span className="text-[9px] lg:text-[10px] tracking-[0.26em] text-skj-gold font-semibold uppercase -mt-0.5">
+                  JEWELLERY
+                </span>
+              </div>
             </Link>
 
             {/* Desktop navigation links */}
@@ -255,12 +263,23 @@ export default function Navbar() {
           >
             {/* Drawer header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-skj-border">
-              <Image
-                src="/SKJlogo.png"
-                alt="SKJ"
-                width={40}
-                height={40}
-              />
+              <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5">
+                <Image
+                  src="/logo.png"
+                  alt="Sai Praveen Jewellery"
+                  width={40}
+                  height={40}
+                  className="rounded-full shadow-sm"
+                />
+                <div className="flex flex-col">
+                  <span className="font-heading font-bold text-skj-charcoal text-sm leading-tight">
+                    SAI PRAVEEN
+                  </span>
+                  <span className="text-[9px] tracking-widest text-skj-gold font-semibold uppercase">
+                    JEWELLERY
+                  </span>
+                </div>
+              </Link>
               <button
                 onClick={() => setMobileOpen(false)}
                 className="p-1 text-skj-charcoal"

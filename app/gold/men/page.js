@@ -4,7 +4,7 @@ import CatalogueView from '@/components/catalogue/CatalogueView';
 export const metadata = {
   title: 'Gold Jewellery for Men',
   description:
-    'Explore premium gold jewellery for men — rings, bracelets, chains, pendants and watches at Sri Kankatala Jewellers.',
+    'Explore premium gold jewellery for men — rings, bracelets, chains, pendants and watches at Sai Praveen Jewellery.',
 };
 
 export default function GoldMenPage() {

@@ -4,7 +4,7 @@ import CatalogueView from '@/components/catalogue/CatalogueView';
 export const metadata = {
   title: 'Silver Jewellery for Women',
   description:
-    'Discover beautiful sterling silver jewellery for women — necklaces, jhumkas, bangles, rings, anklets and more at Sri Kankatala Jewellers.',
+    'Discover beautiful sterling silver jewellery for women — necklaces, jhumkas, bangles, rings, anklets and more at Sai Praveen Jewellery.',
 };
 
 export default function SilverWomenPage() {

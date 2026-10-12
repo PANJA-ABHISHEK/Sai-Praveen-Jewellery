@@ -19,7 +19,7 @@ export default function ContactClient() {
     e.preventDefault();
     
     const waNumber = '919505608181';
-    let text = `❖ *Enquiry — Sri Kankatala Jewellers*\n\n`;
+    let text = `❖ *Enquiry — Sai Praveen Jewellery*\n\n`;
     text += `*Customer Details*\n`;
     text += `Name: ${formData.name}\n`;
     text += `Phone: ${formData.phone}\n`;
@@ -106,7 +106,7 @@ export default function ContactClient() {
                   <button onClick={() => window.open('https://wa.me/919505608181', '_blank')} className="group flex-1 bg-white hover:bg-skj-deep-olive text-skj-charcoal hover:text-white font-semibold text-xs uppercase tracking-wider py-4 px-4 rounded-xl text-center transition-all duration-300 shadow-lg shadow-black/5 flex items-center justify-center gap-2">
                     WhatsApp Us <Send size={14} />
                   </button>
-                  <a href="https://www.google.com/maps/search/?api=1&query=Sri+Kankatala+Jewellers+Maruthi+Nagar+Ravulapalem+Andhra+Pradesh+533238" target="_blank" rel="noopener noreferrer" className="flex-1 bg-transparent hover:bg-white/40 border border-white/60 text-skj-charcoal font-semibold text-xs uppercase tracking-wider py-4 px-4 rounded-xl text-center transition-all duration-300 backdrop-blur-sm">
+                  <a href="https://www.google.com/maps/search/?api=1&query=Sai+Praveen+Jewellers+Ravulapalem+Andhra+Pradesh" target="_blank" rel="noopener noreferrer" className="flex-1 bg-transparent hover:bg-white/40 border border-white/60 text-skj-charcoal font-semibold text-xs uppercase tracking-wider py-4 px-4 rounded-xl text-center transition-all duration-300 backdrop-blur-sm">
                     Directions
                   </a>
                 </div>
@@ -180,7 +180,7 @@ export default function ContactClient() {
                     Submit Enquiry
                   </button>
                   <p className="text-[10px] text-skj-muted leading-relaxed mt-4 max-w-md">
-                    By submitting this form, you agree to our privacy policy and consent to being contacted by Sri Kankatala Jewellers.
+                    By submitting this form, you agree to our privacy policy and consent to being contacted by Sai Praveen Jewellery.
                   </p>
                 </div>
               </form>

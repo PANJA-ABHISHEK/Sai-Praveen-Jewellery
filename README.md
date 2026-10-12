@@ -1,12 +1,12 @@
-# Sri Kankatala Jewellers (SKJ)
+# Sai Praveen Jewellery (SPJ)
 
-A bespoke luxury web application for **Sri Kankatala Jewellers**, Ravulapalem. Crafted with modern Next.js App Router, Tailwind CSS, and designed for an authentic Indian heritage jewellery experience.
+A bespoke luxury web application for **Sai Praveen Jewellery**, Ravulapalem. Crafted with modern Next.js App Router, Tailwind CSS, and designed for an authentic Indian heritage jewellery experience.
 
 ---
 
 ## ✨ Features
 
-- **Luxury Branding & Aesthetics**: Traditional Indian gold, dark beige, and charcoal aesthetic with Playfair Display and Inter typography.
+- **Luxury Branding & Aesthetics**: Royal 22K gold, obsidian black, and champagne pearl aesthetic with Playfair Display and Inter typography.
 - **Top Announcement Carousel**: Real-time rotating brand announcements cycling every 3.5s.
 - **Gold & Silver Catalogues**: Dedicated collections for gold and silver jewellery with category, purity, weight, and pricing filters.
 - **Product Details & Gallery**: High-res product imagery, purity badges, BIS hallmark certification notes, and instant quantity selection.
@@ -48,7 +48,7 @@ npm run start
 ---
 
 ## 📍 Store Location
-**Sri Kankatala Jewellers**  
-Opp. RTC Bus Stand, Main Road,  
+**Sai Praveen Jewellery**  
 Ravulapalem, Andhra Pradesh - 533238  
-Phone: +91 94901 02747
+Phone: +91 95056 08181
+

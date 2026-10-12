@@ -217,7 +217,7 @@ export default function HeroSlider() {
           transition: all 0.3s ease;
         }
         .hero-bullet-active {
-          background: #5F5F01;
+          background: #C59B27;
           width: 40px;
         }
       `}</style>

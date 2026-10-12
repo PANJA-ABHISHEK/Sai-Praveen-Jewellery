@@ -52,7 +52,7 @@ export default function ProductDetailClient({ product }) {
                 />
               ) : (
                 <div className="text-center">
-                  <span className="text-7xl text-skj-gold/20 block mb-2 font-heading">SKJ</span>
+                  <span className="text-7xl text-skj-gold/20 block mb-2 font-heading">SPJ</span>
                   <p className="text-xs text-skj-muted">Product image placeholder</p>
                 </div>
               )}

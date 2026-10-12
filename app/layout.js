@@ -10,12 +10,18 @@ export const metadata = {
     template: `%s | ${siteConfig.businessName}`,
   },
   description: siteConfig.description,
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
   keywords: [
     'jewellery',
     'gold jewellery',
     'silver jewellery',
     'Indian jewellery',
-    'Sri Kankatala Jewellers',
+    'Sai Praveen Jewellery',
+    'SPJ',
+    'Ravulapalem jewellery',
     'necklaces',
     'bangles',
     'earrings',
@@ -27,6 +33,7 @@ export const metadata = {
     type: 'website',
     locale: 'en_IN',
     siteName: siteConfig.businessName,
+    images: [{ url: '/logo.png', width: 800, height: 800, alt: siteConfig.businessName }],
   },
 };
 

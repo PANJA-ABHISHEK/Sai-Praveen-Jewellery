@@ -4,7 +4,7 @@ import CatalogueView from '@/components/catalogue/CatalogueView';
 export const metadata = {
   title: 'Gold Jewellery for Women',
   description:
-    'Browse our exquisite collection of gold jewellery for women — necklaces, harams, earrings, jhumkas, bangles, rings, pendants and more at Sri Kankatala Jewellers.',
+    'Browse our exquisite collection of gold jewellery for women — necklaces, harams, earrings, jhumkas, bangles, rings, pendants and more at Sai Praveen Jewellery.',
 };
 
 export default function GoldWomenPage() {

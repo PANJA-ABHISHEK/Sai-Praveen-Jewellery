@@ -125,7 +125,7 @@ export default function CartClient() {
                         sizes="96px"
                       />
                     ) : (
-                      <span className="text-skj-gold/30 font-heading text-xl">SKJ</span>
+                      <span className="text-skj-gold/30 font-heading text-xl">SPJ</span>
                     )}
                   </div>
                 </Link>
@@ -218,7 +218,7 @@ export default function CartClient() {
                   </span>
                 </div>
                 <p className="text-[11px] text-skj-muted mb-6">
-                  Final pricing will be confirmed by Sri Kankatala Jewellers.
+                  Final pricing will be confirmed by Sai Praveen Jewellery.
                 </p>
 
                 <button
@@ -234,7 +234,7 @@ export default function CartClient() {
               <div className="mt-6 p-4 bg-skj-ivory border border-skj-border/50 rounded-sm">
                 <p className="text-xs text-skj-muted leading-relaxed flex items-start gap-2">
                   <AlertCircle size={14} className="flex-shrink-0 mt-0.5 text-skj-charcoal/60" />
-                  This is an enquiry, not a payment. Stock availability and final pricing will be confirmed by Sri Kankatala Jewellers upon receiving your message.
+                  This is an enquiry, not a payment. Stock availability and final pricing will be confirmed by Sai Praveen Jewellery upon receiving your message.
                 </p>
               </div>
             </div>

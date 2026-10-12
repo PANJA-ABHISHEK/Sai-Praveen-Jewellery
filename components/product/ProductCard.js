@@ -40,7 +40,7 @@ export default function ProductCard({ product }) {
               />
             ) : (
               <div className="absolute inset-0 product-image-placeholder">
-                <span className="text-skj-gold/40 font-heading text-4xl select-none">SKJ</span>
+                <span className="text-skj-gold/40 font-heading text-4xl select-none">SPJ</span>
               </div>
             )}
 

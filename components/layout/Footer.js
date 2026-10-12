@@ -43,14 +43,22 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="inline-block mb-4">
+            <Link href="/" className="inline-flex items-center gap-3.5 mb-4 group">
               <Image
-                src="/SKJlogo.png"
-                alt="Sri Kankatala Jewellers"
-                width={72}
-                height={72}
-                className="brightness-110"
+                src="/logo.png"
+                alt={siteConfig.businessName}
+                width={56}
+                height={56}
+                className="rounded-full shadow-md brightness-105 group-hover:scale-105 transition-transform"
               />
+              <div className="flex flex-col">
+                <span className="font-heading font-bold text-white text-base lg:text-lg tracking-wider leading-tight">
+                  SAI PRAVEEN
+                </span>
+                <span className="text-[9px] tracking-[0.25em] text-skj-gold font-semibold uppercase -mt-0.5">
+                  JEWELLERY
+                </span>
+              </div>
             </Link>
             <p className="text-sm text-white/70 leading-relaxed mb-4 max-w-xs">
               {siteConfig.description}

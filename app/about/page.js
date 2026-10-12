@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { MapPin, ArrowRight } from 'lucide-react';
 
 export const metadata = {
-  title: 'About Sri Kankatala Jewellers | Ravulapalem',
+  title: 'About Sai Praveen Jewellery | Ravulapalem',
   description:
-    'Discover Sri Kankatala Jewellers in Ravulapalem, Andhra Pradesh. Explore our jewellery collections and learn more about our brand.',
+    'Discover Sai Praveen Jewellery in Ravulapalem, Andhra Pradesh. Explore our jewellery collections and learn more about our brand.',
 };
 
 export default function AboutPage() {
@@ -19,7 +19,7 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center pt-8 pb-12 lg:pt-12 lg:pb-20">
             <div className="max-w-xl order-2 lg:order-1">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-skj-olive mb-4 block" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                Sri Kankatala Jewellers
+                Sai Praveen Jewellery
               </span>
               <h1
                 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-6"
@@ -32,7 +32,7 @@ export default function AboutPage() {
                   Discover the timeless beauty of Indian jewellery, bringing elegance to your celebrations, traditions and treasured moments.
                 </p>
                 <p className="text-base text-skj-muted leading-relaxed">
-                  Located in the heart of Ravulapalem, Andhra Pradesh, Sri Kankatala Jewellers has been a trusted destination for families seeking authentic craftsmanship and pure gold designs. We invite you to explore collections that complement your individual style while honouring cultural heritage.
+                  Located in the heart of Ravulapalem, Andhra Pradesh, Sai Praveen Jewellery has been a trusted destination for families seeking authentic craftsmanship and pure gold designs. We invite you to explore collections that complement your individual style while honouring cultural heritage.
                 </p>
               </div>
               <Link href="/gold/women" className="btn-primary rounded-full px-8 py-3.5">
@@ -43,7 +43,7 @@ export default function AboutPage() {
             <div className="relative w-full h-[350px] lg:h-[420px] max-w-sm lg:max-w-md mx-auto lg:ml-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white order-1 lg:order-2">
               <Image
                 src="/images/skjshop1.png"
-                alt="Sri Kankatala Jewellers Store"
+                alt="Sai Praveen Jewellery Store"
                 fill
                 className="object-cover object-top"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -65,7 +65,7 @@ export default function AboutPage() {
               Our Story
             </p>
             <p className="text-lg sm:text-xl text-skj-charcoal leading-relaxed font-medium" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              “At Sri Kankatala Jewellers, jewellery represents more than beauty — it reflects tradition, personal style and the special moments that bring families together. Located in Ravulapalem, Andhra Pradesh, we invite customers to discover jewellery that complements their celebrations, cultural traditions and individual style.”
+              “At Sai Praveen Jewellery, jewellery represents more than beauty — it reflects tradition, personal style and the special moments that bring families together. Located in Ravulapalem, Andhra Pradesh, we invite customers to discover jewellery that complements their celebrations, cultural traditions and individual style.”
             </p>
             <div className="w-16 h-0.5 bg-gradient-to-r from-skj-olive to-skj-gold mx-auto mt-8" aria-hidden="true" />
           </div>
@@ -103,7 +103,7 @@ export default function AboutPage() {
                   Indian jewellery is steeped in significance. It is not merely an accessory, but a symbol of love, heritage, and prosperity passed down through generations.
                 </p>
                 <p>
-                  From the heavy temple necklaces that adorn brides on their wedding day, to the delicate silver anklets given to a newborn, every piece tells a story. At Sri Kankatala Jewellers, we take pride in being a part of these cherished family traditions, offering pieces that become modern heirlooms.
+                  From the heavy temple necklaces that adorn brides on their wedding day, to the delicate silver anklets given to a newborn, every piece tells a story. At Sai Praveen Jewellery, we take pride in being a part of these cherished family traditions, offering pieces that become modern heirlooms.
                 </p>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function AboutPage() {
           <div className="relative w-full max-w-5xl mx-auto h-[300px] sm:h-[400px] rounded-3xl overflow-hidden shadow-sm border border-skj-border/60">
             {/* Embedded Google Map */}
             <iframe
-              src="https://maps.google.com/maps?q=Sri+Kankatala+Jewellers+Ravulapalem&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=Sai+Praveen+Jewellery+Ravulapalem&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -186,7 +186,7 @@ export default function AboutPage() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="absolute inset-0 grayscale-[15%] contrast-110"
-              title="Sri Kankatala Jewellers Location Map"
+              title="Sai Praveen Jewellery Location Map"
             ></iframe>
             
           </div>

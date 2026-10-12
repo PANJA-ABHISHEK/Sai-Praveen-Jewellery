@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 
 export const metadata = {
-  title: 'Terms of Service | Sri Kankatala Jewellers',
-  description: 'Terms of Service for Sri Kankatala Jewellers.',
+  title: 'Terms of Service | Sai Praveen Jewellery',
+  description: 'Terms of Service for Sai Praveen Jewellery.',
 };
 
 export default function TermsOfServicePage() {
@@ -17,7 +17,7 @@ export default function TermsOfServicePage() {
         
         <div className="prose prose-skj max-w-none text-skj-muted space-y-6 text-sm sm:text-base leading-relaxed">
           <p>
-            Welcome to Sri Kankatala Jewellers. By accessing our website, communicating with us via WhatsApp, or purchasing our products, you agree to comply with and be bound by the following terms and conditions.
+            Welcome to Sai Praveen Jewellery. By accessing our website, communicating with us via WhatsApp, or purchasing our products, you agree to comply with and be bound by the following terms and conditions.
           </p>
 
           <h2 className="text-xl font-semibold text-skj-charcoal mt-10 mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
@@ -48,7 +48,7 @@ export default function TermsOfServicePage() {
             4. Changes to Terms
           </h2>
           <p>
-            Sri Kankatala Jewellers reserves the right to update or modify these Terms of Service at any time without prior notice.
+            Sai Praveen Jewellery reserves the right to update or modify these Terms of Service at any time without prior notice.
           </p>
         </div>
       </div>

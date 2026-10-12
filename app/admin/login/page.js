@@ -48,14 +48,14 @@ export default function AdminLoginPage() {
           {/* Brand Logo Emblem */}
           <div className="flex justify-center mb-3.5">
             <div
-              style={{ width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' }}
+              style={{ width: '70px', height: '70px', minWidth: '70px', minHeight: '70px' }}
               className="rounded-full overflow-hidden flex items-center justify-center bg-white shadow-xs border border-stone-200 flex-shrink-0"
             >
               <img
-                src="/SKJlogo.png"
-                alt="Sri Kankatala Jewellers"
-                style={{ width: '64px', height: '64px', maxWidth: '64px', maxHeight: '64px', objectFit: 'contain' }}
-                className="block"
+                src="/logo.png"
+                alt="Sai Praveen Jewellery"
+                style={{ width: '70px', height: '70px', maxWidth: '70px', maxHeight: '70px', objectFit: 'contain' }}
+                className="block rounded-full"
               />
             </div>
           </div>
