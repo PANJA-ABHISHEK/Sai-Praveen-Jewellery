@@ -210,14 +210,14 @@ export default function CatalogueView({ material, section, audience, categoryNam
 
   // Shared filter panel content
   const FilterContent = () => (
-    <div className="max-h-[calc(100vh-140px)] space-y-8 overflow-y-auto rounded-3xl border border-skj-gold/20 bg-white/95 p-5 shadow-[0_14px_35px_rgba(54,24,29,0.08)] custom-scrollbar sm:p-6">
+    <div className="hide-scrollbar max-h-[calc(100vh-140px)] space-y-8 overflow-y-auto rounded-3xl border border-skj-gold/20 bg-white/95 p-5 shadow-[0_14px_35px_rgba(54,24,29,0.08)] sm:p-6">
       {/* Categories are only relevant to Women and Men jewellery. */}
       {showCategoryFilter && <div>
         <h3 className="text-xs font-bold uppercase tracking-widest text-skj-charcoal mb-4"
           style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
           Category
         </h3>
-        <div className="space-y-3 max-h-[220px] overflow-y-auto custom-scrollbar pr-3">
+        <div className="hide-scrollbar max-h-[220px] space-y-3 overflow-y-auto pr-1">
           {categories.map((cat) => {
             const count = allProducts.filter(p => p.category === cat).length;
             const isChecked = selectedCategories.includes(cat);
@@ -530,7 +530,7 @@ export default function CatalogueView({ material, section, audience, categoryNam
             onClick={() => setMobileFiltersOpen(false)}
             aria-hidden="true"
           />
-          <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-3xl bg-skj-ivory animate-slideUp">
+          <div className="hide-scrollbar absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-3xl bg-skj-ivory animate-slideUp">
             <div className="sticky top-0 z-10 flex items-center justify-between border-b border-skj-border bg-white/95 px-5 py-3 backdrop-blur">
               <h2 className="text-sm font-semibold text-skj-charcoal uppercase tracking-wider"
                 style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
@@ -569,18 +569,12 @@ export default function CatalogueView({ material, section, audience, categoryNam
         }
         
         /* Custom scrollbar for filter card */
+        .custom-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
         .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #E5E7EB;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #5F5F01;
+          display: none;
         }
       `}</style>
     </div>
