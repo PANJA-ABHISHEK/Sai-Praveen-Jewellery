@@ -17,8 +17,9 @@ export const metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: STATIC_MEDIA.logo,
-    apple: STATIC_MEDIA.logo,
+    icon: [{ url: '/logo.png', type: 'image/png', sizes: '512x512' }],
+    shortcut: '/logo.png',
+    apple: [{ url: '/logo.png', type: 'image/png', sizes: '512x512' }],
   },
   keywords: [
     'jewellery',
