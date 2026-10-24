@@ -5,6 +5,7 @@ import siteConfig from '@/lib/config';
 import AboutAnimations from '@/components/about/AboutAnimations';
 import SocialLinks from '@/components/common/SocialLinks';
 import { STATIC_MEDIA } from '@/data/media';
+import { withCanonical } from '@/lib/seo';
 
 const showroomImages = {
   exterior: 'https://res.cloudinary.com/g3ycdrt0/image/upload/v1792748491/sai_praveen/about/shop-img1_jqvior.jpg',
@@ -29,10 +30,10 @@ const storeAddress = [siteConfig.address.line1, siteConfig.address.line2, siteCo
 const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${siteConfig.businessName}, ${storeAddress}`)}`;
 const embeddedMapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${siteConfig.businessName}, ${storeAddress}`)}&output=embed`;
 
-export const metadata = {
+export const metadata = withCanonical({
   title: 'About Sai Praveen Jewellery | Vijayawada',
   description: 'Step inside Sai Praveen Jewellery in Patamata, Vijayawada: a welcoming showroom for trusted gold and silver jewellery.',
-};
+}, '/about');
 
 export default function AboutPage() {
   return (

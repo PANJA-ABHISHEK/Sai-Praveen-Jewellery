@@ -1,41 +1,15 @@
-'use client';
+import HomePageClient from '@/components/home/HomePageClient';
+import { withCanonical } from '@/lib/seo';
 
-import { useEffect } from 'react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-import HeroSlider from '@/components/home/HeroSlider';
-import HeroMarquee from '@/components/home/HeroMarquee';
-import ShopStoryVideo from '@/components/home/ShopStoryVideo';
-import ShopByCategory from '@/components/home/ShopByCategory';
-import FeaturedProducts from '@/components/home/FeaturedProducts';
-import WhySKJ from '@/components/home/WhySKJ';
-import Testimonials from '@/components/home/Testimonials';
+export const metadata = withCanonical(
+  {
+    title: 'Jewellery Showroom in Patamata, Vijayawada',
+    description:
+      'Explore Sai Praveen Jewellery in Patamata, Vijayawada. Discover gold and silver jewellery collections, view our showroom, find directions and contact us for enquiries.',
+  },
+  '/'
+);
 
 export default function HomePage() {
-  useEffect(() => {
-    AOS.init({
-      duration: 700,
-      easing: 'ease-out-cubic',
-      once: true,
-      offset: 60,
-      disable: () =>
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    });
-
-    return () => {
-      AOS.refresh();
-    };
-  }, []);
-
-  return (
-    <>
-      <HeroSlider />
-      <HeroMarquee />
-      <ShopStoryVideo />
-      <ShopByCategory />
-      <FeaturedProducts />
-      <WhySKJ />
-      <Testimonials />
-    </>
-  );
+  return <HomePageClient />;
 }

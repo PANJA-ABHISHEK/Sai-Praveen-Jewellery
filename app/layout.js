@@ -4,11 +4,15 @@ import Footer from '@/components/layout/Footer';
 import { CartProvider } from '@/context/CartContext';
 import siteConfig from '@/lib/config';
 import { STATIC_MEDIA } from '@/data/media';
+import BusinessJsonLd from '@/components/seo/BusinessJsonLd';
+import { getSiteUrl } from '@/lib/seo';
+
+const siteUrl = getSiteUrl();
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
   title: {
-    default: `${siteConfig.businessName} — ${siteConfig.tagline}`,
+    default: `${siteConfig.businessName} | Jewellery Showroom in Patamata, Vijayawada`,
     template: `%s | ${siteConfig.businessName}`,
   },
   description: siteConfig.description,
@@ -36,6 +40,17 @@ export const metadata = {
     locale: 'en_IN',
     siteName: siteConfig.businessName,
     images: [{ url: STATIC_MEDIA.logo, width: 512, height: 512, alt: siteConfig.businessName }],
+    ...(siteUrl ? { url: siteUrl } : {}),
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.businessName,
+    description: siteConfig.description,
+    images: [STATIC_MEDIA.logo],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -47,6 +62,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           <main id="main-content">{children}</main>
           <Footer />
+          <BusinessJsonLd />
         </CartProvider>
       </body>
     </html>

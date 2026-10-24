@@ -1,11 +1,12 @@
 import { Suspense } from 'react';
 import CatalogueView from '@/components/catalogue/CatalogueView';
+import { withCanonical } from '@/lib/seo';
 
-export const metadata = {
+export const metadata = withCanonical({
   title: 'Gold Jewellery for Men',
   description:
     'Explore premium gold jewellery for men — rings, bracelets, chains, pendants and watches at Sai Praveen Jewellery.',
-};
+}, '/gold/men');
 
 export default function GoldMenPage() {
   return (

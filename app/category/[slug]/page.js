@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import CatalogueView from '@/components/catalogue/CatalogueView';
 import categories, { getCategoryBySlug } from '@/data/categories';
+import { withCanonical } from '@/lib/seo';
 
 export function generateStaticParams() {
   return categories.map((category) => ({ slug: category.slug }));
@@ -15,10 +16,10 @@ export async function generateMetadata({ params }) {
     return { title: 'Category Not Found' };
   }
 
-  return {
+  return withCanonical({
     title: `${category.name} Jewellery`,
     description: `Explore gold and silver ${category.name.toLowerCase()} designs for women and men.`,
-  };
+  }, `/category/${category.slug}`);
 }
 
 export default async function CategoryPage({ params }) {

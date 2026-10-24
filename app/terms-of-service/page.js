@@ -1,10 +1,11 @@
 import Link from 'next/link';
+import { withCanonical } from '@/lib/seo';
 
 
-export const metadata = {
+export const metadata = withCanonical({
   title: 'Terms of Service | Sai Praveen Jewellery',
   description: 'Terms of Service for Sai Praveen Jewellery.',
-};
+}, '/terms-of-service');
 
 export default function TermsOfServicePage() {
   return (

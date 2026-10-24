@@ -1,10 +1,11 @@
 import { Suspense } from 'react';
 import CatalogueView from '@/components/catalogue/CatalogueView';
+import { withCanonical } from '@/lib/seo';
 
-export const metadata = {
+export const metadata = withCanonical({
   title: 'Gold Collections',
   description: 'Explore gold articles and traditional pieces from Sai Praveen Jewellery.',
-};
+}, '/gold/collections');
 
 export default function GoldCollectionsPage() {
   return (

@@ -1,10 +1,11 @@
 import Link from 'next/link';
+import { withCanonical } from '@/lib/seo';
 
 
-export const metadata = {
+export const metadata = withCanonical({
   title: 'Privacy Policy | Sai Praveen Jewellery',
   description: 'Privacy Policy for Sai Praveen Jewellery.',
-};
+}, '/privacy-policy');
 
 export default function PrivacyPolicyPage() {
   return (
