@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ShoppingBag, Check, Eye } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { formatPrice, formatWeight } from '@/lib/utils';
+import { getProductSectionLabel } from '@/data/productSections';
 import Toast from '@/components/ui/Toast';
 
 export default function ProductCard({ product }) {
@@ -25,9 +26,9 @@ export default function ProductCard({ product }) {
 
   return (
     <>
-      <article className="group relative bg-white rounded-2xl overflow-hidden border border-skj-border/40 hover:border-skj-olive/40 transition-all duration-300 shadow-sm hover:shadow-xl">
+      <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-skj-border/40 bg-white shadow-sm transition-all duration-300 hover:border-skj-olive/40 hover:shadow-xl">
         {/* Image container */}
-        <Link href={`/product/${product.slug}`} className="block">
+        <Link href={`/product/${product.slug}`} className="block shrink-0">
           <div className="relative aspect-[4/5] overflow-hidden bg-skj-ivory">
             {/* Product image */}
             {product.images && product.images[0] ? (
@@ -60,7 +61,7 @@ export default function ProductCard({ product }) {
 
             {/* Quick view overlay */}
             <div className="absolute inset-0 bg-skj-charcoal/0 group-hover:bg-skj-charcoal/10 transition-all duration-300 flex items-center justify-center">
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/95 rounded-full shadow-md text-skj-charcoal px-5 py-2.5 text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-wider text-skj-charcoal opacity-0 shadow-md transition-opacity duration-300 group-hover:opacity-100 sm:px-5 sm:py-2.5 sm:text-xs">
                 <Eye size={14} />
                 View Details
               </span>
@@ -69,11 +70,11 @@ export default function ProductCard({ product }) {
         </Link>
 
         {/* Product info */}
-        <div className="p-4">
+        <div className="flex flex-1 flex-col p-3 sm:p-4">
           {/* Category & Material */}
-          <div className="flex items-center gap-2 mb-1.5">
+          <div className="mb-1.5 flex min-h-[2.25rem] items-start gap-1.5 sm:gap-2">
             <span className="text-[11px] font-medium text-skj-olive uppercase tracking-wider">
-              {product.category}
+              {product.category || getProductSectionLabel(product)}
             </span>
             <span className="text-skj-border">·</span>
             <span className="text-[11px] text-skj-muted uppercase tracking-wider">
@@ -83,27 +84,27 @@ export default function ProductCard({ product }) {
 
           {/* Name */}
           <Link href={`/product/${product.slug}`}>
-            <h3 className="text-sm font-medium text-skj-charcoal leading-snug mb-2 line-clamp-2 group-hover:text-skj-olive transition-colors"
+            <h3 className="mb-2 min-h-[2.5rem] text-sm font-medium leading-snug text-skj-charcoal line-clamp-2 transition-colors group-hover:text-skj-olive"
               style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
               {product.name}
             </h3>
           </Link>
 
           {/* Weight */}
-          <p className="text-xs text-skj-muted mb-2">
+          <p className="mb-2 min-h-[1.25rem] text-xs text-skj-muted">
             Wt: {formatWeight(product.weightGrams)}
           </p>
 
           {/* Price & Add to Cart */}
-          <div className="flex items-end justify-between gap-2">
-            <p className="text-base font-semibold text-skj-charcoal" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+          <div className="mt-auto grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+            <p className="min-w-0 truncate text-sm font-semibold text-skj-charcoal sm:text-base" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
               {formatPrice(product.price)}
             </p>
 
             <button
               onClick={handleAddToCart}
               disabled={isOutOfStock}
-              className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-300 shadow-sm hover:shadow-md ${
+              className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-2 text-[10px] font-bold shadow-sm transition-all duration-300 hover:shadow-md sm:gap-1.5 sm:px-4 sm:text-xs ${
                 isOutOfStock
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                   : 'bg-skj-olive text-white hover:bg-skj-deep-olive hover:-translate-y-0.5'

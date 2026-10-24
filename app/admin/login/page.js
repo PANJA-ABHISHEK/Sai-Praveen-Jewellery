@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { STATIC_MEDIA } from '@/data/media';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -9,6 +10,11 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Compile/prefetch the dashboard while the admin is entering credentials.
+  useEffect(() => {
+    router.prefetch('/admin');
+  }, [router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,8 +34,10 @@ export default function AdminLoginPage() {
         throw new Error(data.error || 'Authentication failed');
       }
 
-      router.push('/admin');
-      router.refresh();
+      // The login response already sets the session cookie. A single
+      // replacement navigation avoids the duplicate dashboard render that
+      // push() followed by refresh() causes in the App Router.
+      router.replace('/admin');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -52,7 +60,7 @@ export default function AdminLoginPage() {
               className="rounded-full overflow-hidden flex items-center justify-center bg-white shadow-xs border border-stone-200 flex-shrink-0"
             >
               <img
-                src="/logo.png"
+                src={STATIC_MEDIA.logo}
                 alt="Sai Praveen Jewellery"
                 style={{ width: '70px', height: '70px', maxWidth: '70px', maxHeight: '70px', objectFit: 'contain' }}
                 className="block rounded-full"

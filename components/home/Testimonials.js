@@ -10,43 +10,52 @@ import 'swiper/css/pagination';
 const testimonials = [
   {
     id: 1,
-    author: 'Pushpa Sree',
-    initial: 'P',
-    color: 'bg-blue-600',
-    time: 'a year ago',
-    text: 'Sai Praveen Jewellery creates stunning, high-quality pieces that truly stand out. Their craftsmanship is impeccable, and the staff is friendly and attentive. Every piece I bought exceeded my expectations in beauty and value. Highly recommend for anyone seeking elegant and worthy jewellery that lasts a lifetime.',
+    author: 'arifa sultana',
+    initial: 'A',
+    color: 'bg-sky-600',
+    text: 'Very good collection of gold jewelry. The staff were polite and helpful. The designs are beautiful, and the prices are reasonable. The shopping experience was smooth and pleasant. Highly recommended!',
   },
   {
     id: 2,
-    author: 'Dr Veerendra',
+    author: 'Durga',
     initial: 'D',
-    color: 'bg-indigo-700',
-    time: '2 weeks ago',
-    text: 'Sai Praveen Jewellery is the good looking premium gold jewellery store in Ravulapalem! Hope every customer visits the store and gives jewellery orders at market best prices on making charges. I bought good collections for my family and friends.',
+    color: 'bg-orange-600',
+    text: 'Gold and silver earrings, necklace chains, rings, elephant silver pooja items — timeless designs with a touch of traditional and modern style.',
   },
   {
     id: 3,
-    author: 'subrahmanyam munagala',
-    initial: 'S',
-    color: 'bg-green-700',
-    time: '4 years ago',
-    text: 'This store has been my go to for all my jewellery needs. Lots of varieties to choose from. Friendly and welcoming staff. Good quality and prompt delivery.',
+    author: 'jyothsna P',
+    initial: 'J',
+    color: 'bg-emerald-700',
+    text: 'The service in this shop is very satisfying. We purchase every gold item here, and every model is unique. We are very satisfied and impressed.',
   },
   {
     id: 4,
-    author: 'Gurrala Atchuth Mohan Naidu',
-    initial: 'G',
-    color: 'bg-blue-500',
-    time: '4 years ago',
-    text: 'Best Jewellery collection Available nd 100% Quality Trusted Shop Pls Visit 🙏 ...',
+    author: 'sujana atluri',
+    initial: 'S',
+    color: 'bg-blue-600',
+    text: 'Exceptional customer service, a wide variety of high-quality jewelry, and a positive shopping experience. The staff are friendly and helpful. Best jewellery shop in Vijayawada.',
   },
   {
     id: 5,
-    author: 'Ifa Naina',
-    initial: 'I',
-    color: 'bg-green-600',
-    time: '3 years ago',
-    text: 'Very good collection in Ravulapalem! If you want gorgeous designs and pure hallmark quality, you should definitely go for Sai Praveen Jewellery.',
+    author: 'Mallika Shaik',
+    initial: 'M',
+    color: 'bg-rose-600',
+    text: "I'm always purchasing from Praveen Jewellers. There is good staff, and I'm satisfied compared with other jewellery shops. My mom, relatives, and I all purchase gold here.",
+  },
+  {
+    id: 6,
+    author: 'Avularamana AvulRamana',
+    initial: 'A',
+    color: 'bg-teal-700',
+    text: 'Your shop is very lucky, Rajasekhar garu. You speak very well and explain everything clearly. Many thanks!',
+  },
+  {
+    id: 7,
+    author: 'VR Next',
+    initial: 'V',
+    color: 'bg-lime-700',
+    text: 'No compromise in quality and designs too.',
   },
 ];
 
@@ -55,7 +64,7 @@ export default function Testimonials() {
     <section className="section-spacing bg-skj-ivory overflow-hidden relative" aria-labelledby="testimonials-title">
       <div className="section-container relative z-10">
         {/* Section header */}
-        <div data-aos="fade-up" className="text-center mb-12 sm:mb-16">
+        <div data-aos="fade-up" className="mb-8 text-center sm:mb-12">
           <h2 id="testimonials-title" className="section-title">
             Words From Our Family
           </h2>
@@ -66,7 +75,7 @@ export default function Testimonials() {
         </div>
 
         {/* Swiper Carousel */}
-        <div data-aos="fade-up" data-aos-delay="100" className="pb-16 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div data-aos="fade-up" data-aos-delay="100" className="-mx-4 px-4 pb-10 sm:mx-0 sm:px-0">
           <Swiper
             modules={[Pagination, Autoplay]}
             spaceBetween={24}
@@ -88,7 +97,7 @@ export default function Testimonials() {
                 slidesPerView: 3,
               },
             }}
-            className="w-full !pb-14"
+            className="w-full !pb-10"
           >
             {testimonials.map((t) => (
               <SwiperSlide key={t.id} className="!h-auto">
@@ -100,7 +109,7 @@ export default function Testimonials() {
                       {t.initial}
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-skj-charcoal leading-tight mb-1 line-clamp-1" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+                      <h3 className="text-sm font-bold text-skj-charcoal leading-tight mb-1 line-clamp-2" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                         {t.author}
                       </h3>
                       <div className="flex items-center gap-1.5 sm:gap-2">
@@ -109,7 +118,6 @@ export default function Testimonials() {
                             <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-[1px]" fill="currentColor" />
                           ))}
                         </div>
-                        <span className="text-[10px] sm:text-xs text-skj-muted whitespace-nowrap">{t.time}</span>
                       </div>
                     </div>
                     {/* Google G Logo icon (SVG) */}

@@ -11,28 +11,12 @@ export default function HeroMarquee() {
   ];
 
   return (
-    <div className="relative z-20 -mt-8 sm:-mt-12 lg:-mt-16 w-full flex flex-col">
-      {/* Perfectly matched smooth flowing wave */}
-      <div className="w-full overflow-hidden leading-[0]">
-        <svg
-          className="relative block w-full h-[40px] sm:h-[60px] lg:h-[90px]"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
-        >
-          <path
-            fill="#FFF9EC"
-            fillOpacity="1"
-            d="M0,128L80,144C160,160,320,192,480,176C640,160,800,96,960,85.3C1120,75,1280,117,1360,138.7L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
-          ></path>
-        </svg>
-      </div>
+    <div className="relative z-20 w-full">
+      <div className="h-3 bg-[#FCF8F1] sm:h-4" aria-hidden="true" />
+      <div className="h-px bg-gradient-to-r from-transparent via-[#D9AA3D]/60 to-transparent" aria-hidden="true" />
 
-      {/* Small ivory gap between curve and marquee */}
-      <div className="w-full h-1.5 sm:h-2 lg:h-3 bg-[#FDFBF7]"></div>
-
-      {/* Marquee Bar */}
-      <div className="w-full bg-[#121212] border-y border-[#C59B27]/20 text-white py-3 overflow-hidden">
+      {/* Compact brand statement bar */}
+      <div className="w-full overflow-hidden border-y border-[#D9AA3D]/35 bg-gradient-to-r from-[#35141E] via-[#5B1F2A] to-[#35141E] py-2.5 text-[#FFF9EF] shadow-[0_10px_24px_rgba(91,31,42,0.12)] sm:py-3">
         <div className="flex whitespace-nowrap animate-marquee items-center">
           {/* Duplicate features array to create a seamless loop */}
           {[...features, ...features, ...features].map((feature, index) => (
@@ -51,7 +35,12 @@ export default function HeroMarquee() {
 
       <style jsx>{`
         .animate-marquee {
-          animation: marquee 10s linear infinite;
+  animation: marquee 12s linear infinite;
+        }
+        @media (min-width: 640px) {
+          .animate-marquee {
+            animation-duration: 18s;
+          }
         }
         @keyframes marquee {
           0% {

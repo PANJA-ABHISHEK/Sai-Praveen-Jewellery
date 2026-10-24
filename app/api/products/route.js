@@ -1,19 +1,20 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
+import { db, withFirestoreTimeout } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { getCentralizedRates, calculateProductPrice } from '@/lib/pricing';
+import { getProductSection } from '@/data/productSections';
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const material = searchParams.get('material');
-    const audience = searchParams.get('audience');
+    const section = searchParams.get('section') || searchParams.get('audience');
 
     let products = [];
     try {
       const productsRef = collection(db, 'products');
       const q = query(productsRef, orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
+      const snapshot = await withFirestoreTimeout(() => getDocs(q));
 
       if (!snapshot.empty) {
         const rates = await getCentralizedRates();
@@ -35,6 +36,7 @@ export async function GET(request) {
           return {
             id: doc.id,
             ...data,
+            section: getProductSection(data),
             price,
           };
         });
@@ -46,8 +48,8 @@ export async function GET(request) {
     if (material) {
       products = products.filter((p) => p.material === material);
     }
-    if (audience) {
-      products = products.filter((p) => p.audience === audience);
+    if (section) {
+      products = products.filter((p) => getProductSection(p) === section);
     }
 
     return NextResponse.json({ products });

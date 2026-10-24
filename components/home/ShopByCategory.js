@@ -3,23 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import categories from '@/data/categories';
-
-// Map categories to their primary catalogue routes
-const categoryRouteMap = {
-  Necklaces: '/gold/women',
-  Harams: '/gold/women',
-  Earrings: '/gold/women',
-  Jhumkas: '/gold/women',
-  Bangles: '/gold/women',
-  Rings: '/gold/women',
-  Bracelets: '/gold/men',
-  Pendants: '/gold/women',
-  Mangalsutras: '/gold/women',
-  Anklets: '/gold/women',
-  'Nose Pins': '/gold/women',
-  Papidi: '/gold/women',
-  Watches: '/gold/men',
-};
+import { STATIC_MEDIA } from '@/data/media';
 
 // Select featured categories for homepage display
 const featuredCategories = categories.filter((c) =>
@@ -28,19 +12,19 @@ const featuredCategories = categories.filter((c) =>
 
 // Image URLs per category
 const categoryImages = {
-  Necklaces: '/images/categories/Necklace1.jpg',
-  Harams: '/images/categories/Harams.jpg',
-  Earrings: '/images/categories/Earrings.jpg',
-  Jhumkas: '/images/categories/Jumkas.jpg',
-  Rings: '/images/categories/Rings.jpg',
-  Bangles: '/images/categories/Bangles.png',
-  Bracelets: '/images/categories/Bracelets.jpg',
-  Mangalsutras: '/images/categories/Mangalasustras.jpg',
+  Necklaces: STATIC_MEDIA.categories.necklaces,
+  Harams: STATIC_MEDIA.categories.harams,
+  Earrings: STATIC_MEDIA.categories.earrings,
+  Jhumkas: STATIC_MEDIA.categories.jhumkas,
+  Rings: STATIC_MEDIA.categories.rings,
+  Bangles: STATIC_MEDIA.categories.bangles,
+  Bracelets: STATIC_MEDIA.categories.bracelets,
+  Mangalsutras: STATIC_MEDIA.categories.mangalsutras,
 };
 
 export default function ShopByCategory() {
   return (
-    <section className="section-spacing bg-skj-ivory" aria-labelledby="categories-title">
+    <section className="section-spacing !pb-8 lg:!pb-8 bg-skj-ivory" aria-labelledby="categories-title">
       <div className="section-container">
         {/* Section header */}
         <div data-aos="fade-up">
@@ -56,8 +40,7 @@ export default function ShopByCategory() {
         {/* Category grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {featuredCategories.map((cat, index) => {
-            const route = categoryRouteMap[cat.name] || '/gold/women';
-            const href = `${route}?category=${encodeURIComponent(cat.name)}`;
+            const href = `/category/${cat.slug}`;
 
             return (
               <Link
@@ -101,7 +84,7 @@ export default function ShopByCategory() {
         </div>
 
         {/* View all link */}
-        <div className="text-center mt-8" data-aos="fade-up">
+        <div className="mt-6 text-center" data-aos="fade-up">
           <Link href="/gold/women" className="btn-secondary">
             View All Collections
           </Link>

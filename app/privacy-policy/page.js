@@ -8,9 +8,10 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen bg-skj-ivory/60">
 
-      <div className="section-container py-12 lg:py-20 max-w-4xl">
+      <div className="section-container max-w-4xl py-10 lg:py-16">
+        <div className="rounded-3xl border border-skj-gold/20 bg-white/95 p-6 shadow-[0_14px_35px_rgba(54,24,29,0.08)] sm:p-10">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-skj-charcoal mb-8" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
           Privacy Policy
         </h1>
@@ -55,8 +56,9 @@ export default function PrivacyPolicyPage() {
             4. Contact Us
           </h2>
           <p>
-            If you have any questions regarding this Privacy Policy, please contact us at our store in Ravulapalem or call us at +91 95056 08181.
+            If you have any questions regarding this Privacy Policy, please contact us at our store at Municipal Complex, M G Road, Patamata, Vijayawada or call us at +91 79936 12666.
           </p>
+        </div>
         </div>
       </div>
     </div>

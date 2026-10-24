@@ -31,7 +31,7 @@ export default function FeaturedProducts() {
   }
 
   return (
-    <section className="section-spacing bg-skj-ivory" aria-labelledby="featured-title">
+    <section className="section-spacing !pt-8 lg:!pt-8 bg-skj-ivory" aria-labelledby="featured-title">
       <div className="section-container">
         {/* Section header */}
         <div data-aos="fade-up">
@@ -47,14 +47,14 @@ export default function FeaturedProducts() {
         {/* Product grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
           {products.map((product, index) => (
-            <div key={product.id} data-aos="fade-up" data-aos-delay={index * 50}>
+              <div key={product.id} className="h-full" data-aos="fade-up" data-aos-delay={index * 50}>
               <ProductCard product={product} />
             </div>
           ))}
         </div>
 
         {/* View all */}
-        <div className="text-center mt-10" data-aos="fade-up">
+        <div className="mt-8 text-center" data-aos="fade-up">
           <Link href="/gold/women" className="btn-primary">
             View All Products
           </Link>

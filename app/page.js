@@ -5,6 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import HeroSlider from '@/components/home/HeroSlider';
 import HeroMarquee from '@/components/home/HeroMarquee';
+import ShopStoryVideo from '@/components/home/ShopStoryVideo';
 import ShopByCategory from '@/components/home/ShopByCategory';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
 import WhySKJ from '@/components/home/WhySKJ';
@@ -30,6 +31,7 @@ export default function HomePage() {
     <>
       <HeroSlider />
       <HeroMarquee />
+      <ShopStoryVideo />
       <ShopByCategory />
       <FeaturedProducts />
       <WhySKJ />

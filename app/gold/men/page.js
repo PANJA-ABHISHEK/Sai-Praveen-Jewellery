@@ -10,7 +10,7 @@ export const metadata = {
 export default function GoldMenPage() {
   return (
     <Suspense fallback={<CatalogueLoading />}>
-      <CatalogueView material="gold" audience="men" />
+      <CatalogueView material="gold" section="men" />
     </Suspense>
   );
 }

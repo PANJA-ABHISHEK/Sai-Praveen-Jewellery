@@ -3,7 +3,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { Mail } from 'lucide-react';
 import siteConfig from '@/lib/config';
+import SocialLinks from '@/components/common/SocialLinks';
+import { STATIC_MEDIA } from '@/data/media';
 
 const footerCollections = [
   { label: 'Gold for Women', href: '/gold/women' },
@@ -13,12 +16,10 @@ const footerCollections = [
 ];
 
 const footerCategories = [
-  { label: 'Necklaces', href: '/gold/women?category=Necklaces' },
-  { label: 'Harams', href: '/gold/women?category=Harams' },
-  { label: 'Bangles', href: '/gold/women?category=Bangles' },
-  { label: 'Earrings', href: '/gold/women?category=Earrings' },
-  { label: 'Rings', href: '/gold/women?category=Rings' },
-  { label: 'Bracelets', href: '/gold/men?category=Bracelets' },
+  { label: 'Necklaces', href: '/category/necklaces' },
+  { label: 'Bangles', href: '/category/bangles' },
+  { label: 'Rings', href: '/category/rings' },
+  { label: 'Bracelets', href: '/category/bracelets' },
 ];
 
 const footerLinks = [
@@ -39,16 +40,16 @@ export default function Footer() {
   return (
     <footer className="bg-skj-deep-olive text-white/90" role="contentinfo">
       {/* Main footer content */}
-      <div className="section-container py-8 lg:py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+      <div className="section-container py-9 lg:py-10">
+        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-[1.35fr_1fr_1fr_1fr_1.2fr] lg:gap-5">
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-3.5 mb-4 group">
+            <Link href="/" className="inline-flex items-center gap-3 mb-3 group">
               <Image
-                src="/logo.png"
+                src={STATIC_MEDIA.logo}
                 alt={siteConfig.businessName}
-                width={56}
-                height={56}
+                width={48}
+                height={48}
                 className="rounded-full shadow-md brightness-105 group-hover:scale-105 transition-transform"
               />
               <div className="flex flex-col">
@@ -60,23 +61,24 @@ export default function Footer() {
                 </span>
               </div>
             </Link>
-            <p className="text-sm text-white/70 leading-relaxed mb-4 max-w-xs">
+            <p className="max-w-xs text-sm leading-6 text-white/70">
               {siteConfig.description}
             </p>
+            <SocialLinks className="mt-5" />
           </div>
 
           {/* Collections */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-skj-gold mb-4"
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-skj-gold"
               style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
               Collections
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-1.5">
               {footerCollections.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="text-sm leading-6 text-white/70 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -87,16 +89,16 @@ export default function Footer() {
 
           {/* Categories */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-skj-gold mb-4"
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-skj-gold"
               style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
               Categories
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-1.5">
               {footerCategories.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="text-sm leading-6 text-white/70 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -105,18 +107,18 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Quick links & contact */}
+          {/* Quick links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-skj-gold mb-4"
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-skj-gold"
               style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-              Quick Links
+              Explore
             </h3>
-            <ul className="space-y-2.5 mb-6">
+            <ul className="mb-5 space-y-1.5">
               {footerLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="text-sm leading-6 text-white/70 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -124,17 +126,23 @@ export default function Footer() {
               ))}
             </ul>
 
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-skj-gold mb-3"
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-skj-gold"
               style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
               Contact
             </h3>
-            <address className="not-italic text-sm text-white/70 space-y-1.5">
+            <address className="not-italic space-y-1 text-sm leading-6 text-white/70">
               <p>{siteConfig.address.line1}</p>
-              <p>{siteConfig.address.city}, {siteConfig.address.state}</p>
+              <p>{siteConfig.address.line2}</p>
+              <p>{siteConfig.address.city},</p>
+              <p>{siteConfig.address.state} - {siteConfig.address.pincode}</p>
               <p>
                 <a
                   href={`tel:${siteConfig.phone}`}
-                  className="hover:text-white transition-colors"
+                  className="transition-colors hover:text-white"
                 >
                   {siteConfig.phone}
                 </a>
@@ -146,8 +154,28 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-white/10">
-        <div className="section-container py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/50">
+        <div className="section-container flex flex-col items-center justify-between gap-1 py-4 text-xs text-white/50 sm:flex-row">
+          <div className="text-center sm:text-left">
           <p>© {currentYear} {siteConfig.businessName}. All rights reserved.</p>
+          <p className="mt-1">
+            Developed by{' '}
+            <a
+              href="mailto:panjabhishek57@gmail.com"
+              className="inline-flex items-center gap-1 transition-colors hover:text-white"
+              title="Email Panja Abhishek"
+            >
+              Panja Abhishek <Mail className="h-3 w-3" aria-hidden="true" />
+            </a>{' '}
+            and{' '}
+            <a
+              href="mailto:bhaskarvanjarapu207@gmail.com"
+              className="inline-flex items-center gap-1 transition-colors hover:text-white"
+              title="Email Bhaskar Vanjarapu"
+            >
+              Bhaskar Vanjarapu <Mail className="h-3 w-3" aria-hidden="true" />
+            </a>
+          </p>
+          </div>
           <p>Crafted with care for authentic Indian jewellery lovers.</p>
         </div>
       </div>

@@ -8,24 +8,24 @@
 
 @theme {
   /* SPJ Brand Colours (Regal Gold, Obsidian Black, Champagne Pearl) */
-  --color-skj-red: #C41E3A;
-  --color-skj-olive: #C59B27; /* Royal 22K Gold */
-  --color-skj-deep-olive: #121212; /* Obsidian Luxury Black */
-  --color-skj-gold: #DFB235; /* Radiant Accent Gold */
-  --color-skj-ivory: #FDFBF7; /* Champagne Pearl */
-  --color-skj-charcoal: #141414; /* Deep Obsidian Charcoal */
-  --color-skj-muted: #6E6B65;
-  --color-skj-border: #EADBCA; /* Warm Gold Hairline */
+  --color-skj-red: #B5223E;
+  --color-skj-olive: #A8741D; /* Antique champagne gold */
+  --color-skj-deep-olive: #35141E; /* Deep jewellery wine */
+  --color-skj-gold: #D9AA3D; /* Radiant champagne gold */
+  --color-skj-ivory: #FEFCF8; /* Soft pearl */
+  --color-skj-charcoal: #211719; /* Soft obsidian */
+  --color-skj-muted: #746866;
+  --color-skj-border: #E8D8C6; /* Warm gold hairline */
   --color-skj-white: #FFFFFF;
 
   /* Aliases for SPJ */
-  --color-spj-red: #C41E3A;
-  --color-spj-gold: #C59B27;
-  --color-spj-accent-gold: #DFB235;
-  --color-spj-black: #121212;
-  --color-spj-ivory: #FDFBF7;
-  --color-spj-charcoal: #141414;
-  --color-spj-border: #EADBCA;
+  --color-spj-red: #B5223E;
+  --color-spj-gold: #A8741D;
+  --color-spj-accent-gold: #D9AA3D;
+  --color-spj-black: #35141E;
+  --color-spj-ivory: #FEFCF8;
+  --color-spj-charcoal: #211719;
+  --color-spj-border: #E8D8C6;
 
   /* Fonts */
   --font-heading: 'Playfair Display', 'Georgia', serif;
@@ -48,10 +48,28 @@ html {
 body {
   margin: 0;
   background-color: #FFFFFF;
-  color: #292821;
+  color: #211719;
   font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.6;
   overflow-x: hidden;
+}
+
+@keyframes announcement-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-50% - var(--announcement-gap-offset)), 0, 0);
+  }
+}
+
+.announcement-marquee {
+  animation: announcement-marquee 18s linear infinite;
+}
+
+.announcement-marquee:hover,
+.announcement-marquee:focus-within {
+  animation-play-state: paused;
 }
 
 /* Reduced motion preferences */
@@ -96,7 +114,7 @@ img {
 
 /* Focus ring for keyboard navigation */
 :focus-visible {
-  outline: 2px solid #C59B27;
+  outline: 2px solid #D9AA3D;
   outline-offset: 2px;
 }
 
@@ -110,12 +128,13 @@ img {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C59B27;
-  border-radius: 4px;
+  background: #A8741D;
+  border-radius: 9999px;
+  box-shadow: 0 5px 16px rgba(37, 211, 102, 0.18);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #A67F19;
+  background: #7E5312;
 }
 
 /* ═══════════════════════════════════════
@@ -147,21 +166,21 @@ img {
 
 /* Section spacing */
 .section-spacing {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
 }
 
 @media (min-width: 768px) {
   .section-spacing {
-    padding-top: 4.5rem;
-    padding-bottom: 4.5rem;
+    padding-top: 3.75rem;
+    padding-bottom: 3.75rem;
   }
 }
 
 @media (min-width: 1024px) {
   .section-spacing {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
   }
 }
 
@@ -279,6 +298,7 @@ img {
 .btn-whatsapp:hover {
   background-color: #1DA851;
   transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.28);
 }
 
 /* Product image placeholder */

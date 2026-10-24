@@ -3,10 +3,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
-  ArrowLeft, CheckCircle2, AlertCircle,
-  ImagePlus, Loader2, Check, FolderPlus, X
+  CheckCircle2, AlertCircle,
+  Loader2, Check, FolderPlus, X
 } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import {
@@ -15,6 +14,11 @@ import {
   calculateProductPrice,
 } from '@/lib/pricing';
 import { DEFAULT_CATEGORIES } from '@/lib/categories';
+import { PRODUCT_SECTIONS, sectionHasCategory } from '@/data/productSections';
+import AdminShell from '@/components/admin/AdminShell';
+import ProductImagePicker from '@/components/admin/ProductImagePicker';
+
+const EMPTY_IMAGE_SLOTS = ['', '', ''];
 
 export default function AddProductPage() {
   const router = useRouter();
@@ -31,7 +35,7 @@ export default function AddProductPage() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [material, setMaterial] = useState('gold');
-  const [audience, setAudience] = useState('women');
+  const [section, setSection] = useState('women');
   const [category, setCategory] = useState('Necklaces');
   const [customCategory, setCustomCategory] = useState('');
   const [purity, setPurity] = useState('22K');
@@ -43,9 +47,9 @@ export default function AddProductPage() {
   const [centralizedRates, setCentralizedRates] = useState(null);
 
   // Image Upload State
-  const [imagePreview, setImagePreview] = useState('');
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [cloudinaryUrl, setCloudinaryUrl] = useState('');
+  const [imagePreviews, setImagePreviews] = useState(EMPTY_IMAGE_SLOTS);
+  const [cloudinaryUrls, setCloudinaryUrls] = useState(EMPTY_IMAGE_SLOTS);
+  const [uploadingImages, setUploadingImages] = useState([false, false, false]);
 
   // Submit State: 'idle' | 'submitting' | 'success'
   const [submitStatus, setSubmitStatus] = useState('idle');
@@ -111,6 +115,18 @@ export default function AddProductPage() {
     } else {
       setCategory(val);
       setCustomCategory('');
+    }
+  };
+
+  const handleSectionChange = (e) => {
+    const nextSection = e.target.value;
+    setSection(nextSection);
+    setCustomCategory('');
+
+    if (sectionHasCategory(nextSection)) {
+      setCategory((currentCategory) => currentCategory || categoriesList[0] || 'Necklaces');
+    } else {
+      setCategory('');
     }
   };
 
@@ -193,13 +209,18 @@ export default function AddProductPage() {
     });
   }, [weightGrams, material, purity, makingChargeType, makingChargeValue, extraAmount, centralizedRates]);
 
-  // Automatic upload to Cloudinary upon selecting an image
-  const handleFileChange = async (e) => {
+  const hasCategory = sectionHasCategory(section);
+
+  // Automatic upload to Cloudinary upon selecting a product photo
+  const handleFileChange = async (index, e) => {
     const file = e.target.files?.[0];
+    e.target.value = '';
     if (!file) return;
 
-    setImagePreview(URL.createObjectURL(file));
-    setUploadingImage(true);
+    const localPreview = URL.createObjectURL(file);
+    setImagePreviews((previous) => previous.map((value, slot) => slot === index ? localPreview : value));
+    setCloudinaryUrls((previous) => previous.map((value, slot) => slot === index ? '' : value));
+    setUploadingImages((previous) => previous.map((value, slot) => slot === index ? true : value));
     setError('');
 
     try {
@@ -216,13 +237,34 @@ export default function AddProductPage() {
         throw new Error(data.error || 'Image upload failed');
       }
 
-      setCloudinaryUrl(data.url);
+      setCloudinaryUrls((previous) => previous.map((value, slot) => slot === index ? data.url : value));
     } catch (err) {
       console.error('Image upload failed:', err);
+      URL.revokeObjectURL(localPreview);
+      setImagePreviews((previous) => previous.map((value, slot) => slot === index ? '' : value));
+      setCloudinaryUrls((previous) => previous.map((value, slot) => slot === index ? '' : value));
       setError(`Image Upload Error: ${err.message}`);
     } finally {
-      setUploadingImage(false);
+      setUploadingImages((previous) => previous.map((value, slot) => slot === index ? false : value));
     }
+  };
+
+  const handleRemoveImage = (index) => {
+    const preview = imagePreviews[index];
+    if (preview?.startsWith('blob:')) URL.revokeObjectURL(preview);
+
+    setImagePreviews((previous) => {
+      const next = previous.filter((_, slot) => slot !== index);
+      return [...next, ''].slice(0, 3);
+    });
+    setCloudinaryUrls((previous) => {
+      const next = previous.filter((_, slot) => slot !== index);
+      return [...next, ''].slice(0, 3);
+    });
+    setUploadingImages((previous) => {
+      const next = previous.filter((_, slot) => slot !== index);
+      return [...next, false].slice(0, 3);
+    });
   };
 
   // Handle Form Submit
@@ -252,23 +294,26 @@ export default function AddProductPage() {
       return;
     }
 
-    if (uploadingImage) {
-      setError('Please wait for the image upload to complete.');
+    if (uploadingImages.some(Boolean)) {
+      setError('Please wait for all selected photos to finish uploading.');
       return;
     }
 
-    if (!cloudinaryUrl) {
-      setError('Please select a product image.');
+    const productImages = cloudinaryUrls.filter(Boolean);
+    if (!productImages[0]) {
+      setError('Please select at least one product photo.');
       return;
     }
 
     setSubmitStatus('submitting');
 
     try {
-      const finalCategory = category === 'Other' ? (customCategory.trim() || 'Other') : category;
+      const finalCategory = hasCategory
+        ? (category === 'Other' ? (customCategory.trim() || 'Other') : category)
+        : '';
 
       // Automatically register new category to persistent Firestore storage if not present
-      if (finalCategory && finalCategory !== 'Other' && !categoriesList.includes(finalCategory)) {
+      if (hasCategory && finalCategory && finalCategory !== 'Other' && !categoriesList.includes(finalCategory)) {
         try {
           await fetch('/api/categories', {
             method: 'POST',
@@ -284,7 +329,8 @@ export default function AddProductPage() {
         name: name.trim(),
         description: description.trim(),
         material,
-        audience,
+        section,
+        audience: section === 'women' || section === 'men' ? section : 'all',
         category: finalCategory,
         purity,
         weightGrams: parseFloat(weightGrams) || 0,
@@ -294,7 +340,7 @@ export default function AddProductPage() {
         price: calculatedPrice, // Automatically calculated: Gold Value + Making Charges + Extra Amount
         stockStatus: 'in_stock', // Always in stock when added
         featured,
-        images: [cloudinaryUrl],
+        images: productImages,
       };
 
       const res = await fetch('/api/admin/products', {
@@ -329,50 +375,16 @@ export default function AddProductPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        {/* Card Container */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          {/* Header */}
-          <div className="p-6 sm:p-8 border-b border-gray-100 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link
-                href="/admin"
-                className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition-colors"
-                title="Back to Dashboard"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </Link>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-serif font-bold text-gray-900">
-                  Add New Product
-                </h1>
-                <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-                  Upload to Cloudinary & Firestore directly
-                </p>
-              </div>
-            </div>
-
-            <div className="hidden sm:flex items-center gap-2.5">
-              <div
-                style={{ width: '40px', height: '40px', minWidth: '40px', minHeight: '40px' }}
-                className="rounded-full overflow-hidden flex items-center justify-center bg-white shadow-xs border border-gray-100 flex-shrink-0"
-              >
-                <img
-                  src="/logo.png"
-                  alt="Sai Praveen Jewellery"
-                  style={{ width: '40px', height: '40px', maxWidth: '40px', maxHeight: '40px', objectFit: 'contain' }}
-                  className="block rounded-full"
-                />
-              </div>
-              <span className="font-serif font-semibold text-gray-800 text-sm">
-                Sai Praveen Jewellery
-              </span>
-            </div>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">
+    <AdminShell
+      pageTitle="Add Product"
+      pageDescription="Add a jewellery item, coin, or traditional article to your store."
+      backHref="/admin"
+      backLabel="Back to Products"
+    >
+      <div className="min-h-[calc(100vh-68px)] bg-[#F8F9FA] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <div className="mx-auto max-w-5xl">
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <form onSubmit={handleSubmit} className="space-y-6 p-5 sm:p-8">
             {error && (
               <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl flex items-start gap-3 animate-modal-card">
                 <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
@@ -395,7 +407,7 @@ export default function AddProductPage() {
               />
             </div>
 
-            {/* Row 2: Material & Audience */}
+            {/* Row 2: Material & Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">
@@ -413,22 +425,23 @@ export default function AddProductPage() {
 
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">
-                  Audience / Section *
+                  Section *
                 </label>
                 <select
-                  value={audience}
-                  onChange={(e) => setAudience(e.target.value)}
+                  value={section}
+                  onChange={handleSectionChange}
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B0000] focus:bg-white transition-all cursor-pointer"
                 >
-                  <option value="women">Women</option>
-                  <option value="men">Men</option>
+                  {PRODUCT_SECTIONS.map((item) => (
+                    <option key={item.id} value={item.id}>{item.label}</option>
+                  ))}
                 </select>
               </div>
             </div>
 
             {/* Row 3: Category & Purity (Carats) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div>
+              {hasCategory && <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
                     Category *
@@ -472,7 +485,7 @@ export default function AddProductPage() {
                     />
                   </div>
                 )}
-              </div>
+              </div>}
 
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">
@@ -650,72 +663,18 @@ export default function AddProductPage() {
               />
             </div>
 
-            {/* Row 6: Automatic Cloudinary Image Upload */}
+            {/* Row 6: Product Photos */}
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-2">
-                Product Image *
+                Product Photos *
               </label>
-
-              <div className="border-2 border-dashed border-gray-200 rounded-2xl p-6 bg-gray-50/50 hover:bg-gray-50 transition-colors text-center">
-                {imagePreview ? (
-                  <div className="flex flex-col items-center">
-                    <div className="relative w-40 h-40 rounded-xl overflow-hidden shadow-md border border-gray-200 mb-3 bg-white">
-                      <Image
-                        src={imagePreview}
-                        alt="Preview"
-                        fill
-                        className="object-cover"
-                      />
-                      {uploadingImage && (
-                        <div className="absolute inset-0 bg-black/50 backdrop-blur-xs flex flex-col items-center justify-center text-white text-xs gap-1.5 p-2">
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                          <span>Uploading to Cloudinary...</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {uploadingImage ? (
-                      <span className="inline-flex items-center gap-1.5 text-xs text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" /> Uploading directly to Cloudinary...
-                      </span>
-                    ) : cloudinaryUrl ? (
-                      <div className="flex flex-col items-center gap-1.5">
-                        <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                          <CheckCircle2 className="w-3.5 h-3.5" /> Uploaded to Cloudinary
-                        </span>
-                        <label className="text-xs text-gray-500 hover:text-gray-900 underline cursor-pointer mt-1">
-                          Select a different photo
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className="hidden"
-                          />
-                        </label>
-                      </div>
-                    ) : null}
-                  </div>
-                ) : (
-                  <label className="cursor-pointer flex flex-col items-center justify-center py-4">
-                    <div className="w-14 h-14 rounded-full bg-red-50 text-[#C8102E] flex items-center justify-center mb-3">
-                      <ImagePlus className="w-7 h-7" />
-                    </div>
-                    <span className="text-sm font-semibold text-gray-900">
-                      Click to choose jewellery photo
-                    </span>
-                    <span className="text-xs text-gray-500 mt-1">
-                      Uploads automatically to Cloudinary
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="hidden"
-                      required
-                    />
-                  </label>
-                )}
-              </div>
+              <ProductImagePicker
+                previews={imagePreviews}
+                urls={cloudinaryUrls}
+                uploading={uploadingImages}
+                onSelect={handleFileChange}
+                onRemove={handleRemoveImage}
+              />
             </div>
 
             {/* Row 7: Featured Collection Toggle */}
@@ -747,7 +706,7 @@ export default function AddProductPage() {
 
               <button
                 type="submit"
-                disabled={submitStatus !== 'idle' || uploadingImage}
+                disabled={submitStatus !== 'idle' || uploadingImages.some(Boolean)}
                 className={`min-w-[190px] h-[48px] px-7 py-3 text-white text-sm font-semibold rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2.5 ${
                   submitStatus === 'success'
                     ? 'bg-emerald-600 shadow-emerald-600/30 scale-[1.02] cursor-default'
@@ -886,6 +845,7 @@ export default function AddProductPage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </AdminShell>
   );
 }

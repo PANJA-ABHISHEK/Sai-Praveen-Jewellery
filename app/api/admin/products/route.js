@@ -1,9 +1,15 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
+import { db, withFirestoreTimeout } from '@/lib/firebase';
 import { collection, getDocs, addDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { getAdminSession } from '@/lib/admin-auth';
 import { getCentralizedRates, calculateProductPrice } from '@/lib/pricing';
 import { addCustomCategory } from '@/lib/categories';
+import {
+  getProductSection,
+  normalizeProductSection,
+  sectionHasCategory,
+} from '@/data/productSections';
+import { STATIC_MEDIA } from '@/data/media';
 
 function slugify(text) {
   return text
@@ -15,11 +21,20 @@ function slugify(text) {
     .replace(/\-\-+/g, '-');
 }
 
+function isCloudinaryImageUrl(value) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'https:' && parsed.hostname === 'res.cloudinary.com';
+  } catch {
+    return false;
+  }
+}
+
 export async function GET() {
   try {
     const productsRef = collection(db, 'products');
     const q = query(productsRef, orderBy('createdAt', 'desc'));
-    const snapshot = await getDocs(q);
+    const snapshot = await withFirestoreTimeout(() => getDocs(q));
 
     const rates = await getCentralizedRates();
     const products = snapshot.docs.map((doc) => {
@@ -40,6 +55,7 @@ export async function GET() {
       return {
         id: doc.id,
         ...data,
+        section: getProductSection(data),
         price,
       };
     });
@@ -66,6 +82,7 @@ export async function POST(request) {
       name,
       description,
       material,
+      section,
       audience,
       category,
       weightGrams,
@@ -79,9 +96,40 @@ export async function POST(request) {
       featured = false,
     } = body;
 
-    if (!name || !category || !material || !weightGrams) {
+    const productSection = normalizeProductSection(section || audience, 'women');
+    const hasCategory = sectionHasCategory(productSection);
+    const cleanCategory = hasCategory ? String(category || '').trim() : '';
+
+    if (!name || !material || !weightGrams || (hasCategory && !cleanCategory)) {
       return NextResponse.json(
-        { error: 'Name, material, category, and weight are required' },
+        { error: hasCategory
+          ? 'Name, material, section, category, and weight are required'
+          : 'Name, material, section, and weight are required' },
+        { status: 400 }
+      );
+    }
+
+    if (Array.isArray(images) && images.length > 3) {
+      return NextResponse.json(
+        { error: 'A product can have a maximum of 3 images.' },
+        { status: 400 }
+      );
+    }
+
+    const productImages = Array.isArray(images)
+      ? images.filter((image) => typeof image === 'string' && image.trim())
+      : [];
+
+    if (Array.isArray(images) && productImages.length !== images.length) {
+      return NextResponse.json(
+        { error: 'Please provide up to 3 valid product images.' },
+        { status: 400 }
+      );
+    }
+
+    if (productImages.some((image) => !isCloudinaryImageUrl(image))) {
+      return NextResponse.json(
+        { error: 'Product images must be uploaded through Cloudinary before saving.' },
         { status: 400 }
       );
     }
@@ -112,15 +160,16 @@ export async function POST(request) {
       slug: uniqueSlug,
       description: description ? description.trim() : '',
       material: material.toLowerCase(),
-      audience: (audience || 'women').toLowerCase(),
-      category: category.trim(),
+      section: productSection,
+      audience: productSection === 'women' || productSection === 'men' ? productSection : 'all',
+      category: cleanCategory,
       weightGrams: Number(weightGrams) || 0,
       purity: purity || (material.toLowerCase() === 'gold' ? '22K' : '92.5 Sterling'),
       makingChargeType: makingChargeType === 'milligrams' ? 'milligrams' : 'percentage',
       makingChargeValue: Number(makingChargeValue) || 0,
       extraAmount: Number(extraAmount) || 0,
       price: finalPrice,
-      images: Array.isArray(images) && images.length > 0 ? images : ['/images/categories/Necklaces.png'],
+      images: productImages.length > 0 ? productImages : [STATIC_MEDIA.fallbackNecklaces],
       stockStatus: stockStatus || 'in_stock',
       featured: Boolean(featured),
       createdAt: new Date().toISOString(),

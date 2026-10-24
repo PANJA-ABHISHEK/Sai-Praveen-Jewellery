@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    agentUpgrade: 'security',
+  },
   images: {
     // Allow images from these sources (for development placeholders and future Cloudinary)
     remotePatterns: [

@@ -1,6 +1,6 @@
 # Sai Praveen Jewellery (SPJ)
 
-A bespoke luxury web application for **Sai Praveen Jewellery**, Ravulapalem. Crafted with modern Next.js App Router, Tailwind CSS, and designed for an authentic Indian heritage jewellery experience.
+A bespoke luxury web application for **Sai Praveen Jewellery**, Vijayawada. Crafted with modern Next.js App Router, Tailwind CSS, and designed for an authentic Indian heritage jewellery experience.
 
 ---
 
@@ -11,7 +11,7 @@ A bespoke luxury web application for **Sai Praveen Jewellery**, Ravulapalem. Cra
 - **Gold & Silver Catalogues**: Dedicated collections for gold and silver jewellery with category, purity, weight, and pricing filters.
 - **Product Details & Gallery**: High-res product imagery, purity badges, BIS hallmark certification notes, and instant quantity selection.
 - **Cart & WhatsApp Ordering**: Seamless WhatsApp checkout modal with customer details, delivery address, and PIN code validation.
-- **Store Information & Support**: Ravulapalem showroom details, direct WhatsApp support, Google Maps location, and legal policies.
+- **Store Information & Support**: Vijayawada showroom details, direct WhatsApp support, Google Maps location, and legal policies.
 
 ---
 
@@ -49,6 +49,6 @@ npm run start
 
 ## 📍 Store Location
 **Sai Praveen Jewellery**  
-Ravulapalem, Andhra Pradesh - 533238  
-Phone: +91 95056 08181
+Door No: 58-227/1, Municipal Complex, M.G. Road, Patamata Center, Vijayawada, Andhra Pradesh - 520010
+Phone: +91 79936 12666
 

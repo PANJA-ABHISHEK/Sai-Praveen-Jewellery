@@ -31,23 +31,23 @@ export default function WhySKJ() {
       <div className="section-container">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left: Editorial content */}
-            <div data-aos="fade-right" className="pr-0 lg:pr-8">
+            <div data-aos="fade-right" className="pr-0 text-center lg:pr-8 lg:text-left">
             <p
-              className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-skj-gold mb-4"
+              className="mb-4 text-[10px] font-bold uppercase tracking-[0.25em] text-skj-gold sm:text-xs"
               style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
             >
               Our Heritage
             </p>
             <h2
               id="why-skj-title"
-              className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-skj-charcoal mb-6 leading-[1.15]"
+              className="mb-6 text-3xl font-semibold leading-[1.15] text-skj-charcoal sm:text-4xl lg:text-5xl"
               style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               Why Sai Praveen
               <br />
               Jewellery?
             </h2>
-            <div className="space-y-5 text-sm sm:text-base text-skj-muted leading-relaxed mb-10">
+            <div className="mx-auto mb-10 max-w-2xl space-y-5 text-sm leading-relaxed text-skj-muted sm:text-base lg:mx-0">
               <p>
                 At Sai Praveen Jewellery, we bring together the rich tradition of Indian
                 jewellery-making with a commitment to quality and customer satisfaction that
@@ -62,20 +62,20 @@ export default function WhySKJ() {
             </div>
 
             {/* Quick stats with premium styling */}
-            <div className="flex flex-wrap gap-8 sm:gap-12 pt-6 border-t border-skj-border/50">
-              <div>
+            <div className="flex flex-wrap justify-center gap-8 border-t border-skj-border/50 pt-6 sm:gap-12 lg:justify-start">
+              <div className="text-center">
                 <p className="text-3xl sm:text-4xl font-semibold text-skj-olive mb-1" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
                   22K
                 </p>
                 <p className="text-[10px] sm:text-xs font-medium text-skj-charcoal uppercase tracking-[0.15em]">Gold Purity</p>
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-3xl sm:text-4xl font-semibold text-skj-olive mb-1" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
                   925
                 </p>
                 <p className="text-[10px] sm:text-xs font-medium text-skj-charcoal uppercase tracking-[0.15em]">Sterling Silver</p>
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-3xl sm:text-4xl font-semibold text-skj-olive mb-1" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
                   100%
                 </p>
@@ -85,7 +85,7 @@ export default function WhySKJ() {
           </div>
 
           {/* Right: Value propositions */}
-          <div className="grid sm:grid-cols-2 gap-x-6 gap-y-10 lg:gap-y-12" data-aos="fade-left">
+          <div className="grid gap-x-6 gap-y-10 text-center sm:grid-cols-2 lg:gap-y-12 lg:text-left" data-aos="fade-left">
             {values.map((item, index) => {
               const Icon = item.icon;
               return (
@@ -95,11 +95,11 @@ export default function WhySKJ() {
                   data-aos="fade-up"
                   data-aos-delay={index * 80}
                 >
-                  <div className="w-12 h-12 flex items-center justify-center rounded-full border border-skj-gold/40 text-skj-olive mb-5 group-hover:bg-skj-olive group-hover:text-white group-hover:border-skj-olive transition-all duration-500">
+                  <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-skj-gold/40 text-skj-olive transition-all duration-500 group-hover:border-skj-olive group-hover:bg-skj-olive group-hover:text-white lg:mx-0">
                     <Icon size={20} strokeWidth={1.5} />
                   </div>
                   <h3
-                    className="text-lg sm:text-xl font-medium text-skj-charcoal mb-3"
+                    className="mb-3 text-lg font-medium text-skj-charcoal sm:text-xl"
                     style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                   >
                     {item.title}

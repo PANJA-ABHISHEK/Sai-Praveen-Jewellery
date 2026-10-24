@@ -22,11 +22,13 @@ export default function CartClient() {
 
   if (!isHydrated) {
     return (
-      <div className="section-container py-20">
+      <div className="min-h-screen bg-skj-ivory/60 py-12 sm:py-16">
+        <div className="section-container">
         <div className="grid grid-cols-1 gap-4 max-w-3xl mx-auto">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-24 skeleton" />
+            <div key={i} className="h-24 rounded-2xl border border-skj-border/60 bg-white skeleton" />
           ))}
+        </div>
         </div>
       </div>
     );
@@ -66,10 +68,10 @@ export default function CartClient() {
   // Empty cart
   if (cart.length === 0) {
     return (
-      <div className="bg-white min-h-screen">
+      <div className="bg-skj-ivory/70 min-h-screen">
 
         <div className="section-container py-20 text-center">
-          <div className="w-20 h-20 mx-auto mb-6 bg-skj-ivory flex items-center justify-center">
+          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl border border-skj-gold/25 bg-white shadow-sm flex items-center justify-center">
             <ShoppingBag size={32} className="text-skj-muted" />
           </div>
           <h1
@@ -95,27 +97,36 @@ export default function CartClient() {
   }
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-skj-ivory/70 min-h-screen">
 
-      <div className="section-container py-8 lg:py-12">
-        <h1
-          className="text-2xl sm:text-3xl font-semibold text-skj-charcoal mb-8"
-          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-        >
-          Shopping Cart
-        </h1>
+      <div className="section-container py-8 lg:py-10">
+        <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.28em] text-skj-gold">Your selection</p>
+            <h1
+              className="text-2xl sm:text-3xl font-semibold text-skj-charcoal"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+            >
+              Shopping Cart
+            </h1>
+            <p className="mt-1.5 text-sm text-skj-muted">Review your pieces before sending an enquiry.</p>
+          </div>
+          <span className="w-fit rounded-full border border-skj-gold/30 bg-white px-3.5 py-1.5 text-xs font-semibold text-skj-olive shadow-sm">
+            {cart.length} {cart.length === 1 ? 'piece' : 'pieces'}
+          </span>
+        </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
           {/* Cart items */}
           <div className="lg:col-span-2 space-y-4">
             {cart.map((item) => (
               <div
                 key={item.id}
-                className="flex gap-4 p-4 border border-skj-border/60 bg-white"
+                className="flex gap-4 rounded-2xl border border-skj-border/70 bg-white/95 p-4 shadow-[0_8px_24px_rgba(54,24,29,0.06)] transition-shadow hover:shadow-[0_12px_30px_rgba(54,24,29,0.1)] sm:p-5"
               >
                 {/* Item image */}
                 <Link href={`/product/${item.slug}`} className="flex-shrink-0">
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-skj-ivory to-skj-border/40 flex items-center justify-center overflow-hidden">
+                  <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-skj-ivory to-skj-border/40 ring-1 ring-skj-gold/20 sm:h-24 sm:w-24">
                     {item.image ? (
                       <Image
                         src={item.image}
@@ -147,32 +158,32 @@ export default function CartClient() {
                   </p>
 
                   {/* Quantity controls */}
-                  <div className="flex items-center justify-between mt-3">
-                    <div className="flex items-center border border-skj-border">
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center overflow-hidden rounded-xl border border-skj-border/80 bg-skj-ivory/40">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="p-1.5 text-skj-charcoal hover:bg-skj-ivory transition-colors"
+                        className="p-2 text-skj-charcoal transition-colors hover:bg-white"
                         aria-label="Decrease quantity"
                       >
                         <Minus size={14} />
                       </button>
-                      <span className="w-8 text-center text-xs font-medium">{item.quantity}</span>
+                      <span className="w-8 text-center text-xs font-semibold text-skj-charcoal">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="p-1.5 text-skj-charcoal hover:bg-skj-ivory transition-colors"
+                        className="p-2 text-skj-charcoal transition-colors hover:bg-white"
                         aria-label="Increase quantity"
                       >
                         <Plus size={14} />
                       </button>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="ml-auto flex items-center gap-2.5">
                       <span className="text-sm font-semibold text-skj-olive" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                         {formatPrice(item.price * item.quantity)}
                       </span>
                       <button
                         onClick={() => removeFromCart(item.id)}
-                        className="p-1.5 text-skj-muted hover:text-skj-red transition-colors"
+                        className="rounded-lg p-2 text-skj-muted transition-colors hover:bg-red-50 hover:text-skj-red"
                         aria-label={`Remove ${item.name} from cart`}
                       >
                         <Trash2 size={14} />
@@ -186,7 +197,7 @@ export default function CartClient() {
             {/* Continue shopping */}
             <Link
               href="/gold/women"
-              className="inline-flex items-center gap-1.5 text-sm text-skj-olive hover:text-skj-deep-olive transition-colors mt-2"
+              className="mt-1 inline-flex items-center gap-2 rounded-full border border-skj-gold/25 bg-white px-4 py-2 text-sm text-skj-olive shadow-sm transition-colors hover:border-skj-gold hover:text-skj-deep-olive"
             >
               <ArrowLeft size={14} />
               Continue Shopping
@@ -195,22 +206,22 @@ export default function CartClient() {
 
           {/* Order summary */}
           <div className="lg:col-span-1">
-            <div className="sticky top-28 bg-white border border-skj-border p-6 shadow-sm">
+            <div className="sticky top-28 rounded-3xl border border-skj-gold/25 bg-white/95 p-5 shadow-[0_18px_50px_rgba(54,24,29,0.1)] sm:p-6">
               <h2
-                className="text-xl font-bold text-skj-charcoal mb-6"
+                className="mb-6 text-xl font-bold text-skj-charcoal"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 Order Summary
               </h2>
 
-              <div className="space-y-4 mb-4">
+              <div className="mb-4 space-y-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-skj-muted">Subtotal ({cart.length} items)</span>
                   <span className="font-semibold text-skj-charcoal">{formatPrice(subtotal)}</span>
                 </div>
               </div>
 
-              <div className="border-t border-skj-border pt-4 mb-4">
+              <div className="mb-4 border-t border-skj-border/70 pt-4">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-base font-bold text-skj-charcoal">Estimated Total</span>
                   <span className="text-xl font-bold text-skj-charcoal" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
@@ -223,17 +234,19 @@ export default function CartClient() {
 
                 <button
                   onClick={() => setShowCheckout(true)}
-                  className="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-semibold py-3 px-4 rounded-md flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  className="w-full rounded-2xl bg-[#25D366] px-4 py-3.5 font-semibold text-white shadow-md shadow-green-500/15 transition-all hover:-translate-y-0.5 hover:bg-[#1DA851] hover:shadow-lg"
                 >
-                  <MessageCircle size={18} />
-                  Order on WhatsApp
+                  <span className="flex items-center justify-center gap-2">
+                    <MessageCircle size={18} />
+                    Order on WhatsApp
+                  </span>
                 </button>
               </div>
 
               {/* Info note */}
-              <div className="mt-6 p-4 bg-skj-ivory border border-skj-border/50 rounded-sm">
+              <div className="mt-6 rounded-2xl border border-skj-gold/20 bg-skj-ivory/80 p-4">
                 <p className="text-xs text-skj-muted leading-relaxed flex items-start gap-2">
-                  <AlertCircle size={14} className="flex-shrink-0 mt-0.5 text-skj-charcoal/60" />
+                  <AlertCircle size={14} className="mt-0.5 flex-shrink-0 text-skj-gold" />
                   This is an enquiry, not a payment. Stock availability and final pricing will be confirmed by Sai Praveen Jewellery upon receiving your message.
                 </p>
               </div>
@@ -244,13 +257,16 @@ export default function CartClient() {
 
       {/* Checkout Modal */}
       {showCheckout && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
-            <div className="p-6 sm:p-8">
-              <h2 className="text-2xl font-bold text-skj-charcoal mb-1">Complete Your Order</h2>
-              <p className="text-sm text-skj-muted mb-6">Enter your details to send the order via WhatsApp</p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-2 backdrop-blur-sm sm:p-4">
+          <div className="max-h-[calc(100dvh-16px)] w-full max-w-md overflow-hidden rounded-[1.75rem] border border-skj-gold/25 bg-white shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="px-5 pb-4 pt-6 sm:px-8 sm:pb-5 sm:pt-7">
+              <h2 className="text-2xl font-bold text-skj-charcoal">Complete Your Order</h2>
+              <p className="mt-1 text-sm text-skj-muted">Enter your details to send the order via WhatsApp</p>
+            </div>
 
-              <div className="space-y-5">
+            <div className="px-5 pb-5 sm:px-8 sm:pb-7">
+
+              <div className="space-y-4">
                 {/* Name */}
                 <div>
                   <label className="block text-sm font-semibold text-skj-charcoal mb-1.5">
@@ -261,8 +277,8 @@ export default function CartClient() {
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="Enter your full name"
-                    className={`w-full px-4 py-3 rounded-xl text-sm border bg-white focus:outline-none transition-colors ${
-                      formErrors.name ? 'border-skj-red' : 'border-skj-border focus:border-skj-olive'
+                    className={`w-full rounded-2xl border bg-white px-4 py-3 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-skj-gold/15 ${
+                      formErrors.name ? 'border-skj-red' : 'border-skj-border focus:border-skj-gold'
                     }`}
                   />
                   {formErrors.name && (
@@ -282,8 +298,8 @@ export default function CartClient() {
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value)}
                     placeholder="Enter your phone number"
-                    className={`w-full px-4 py-3 rounded-xl text-sm border bg-white focus:outline-none transition-colors ${
-                      formErrors.phone ? 'border-skj-red' : 'border-skj-border focus:border-skj-olive'
+                    className={`w-full rounded-2xl border bg-white px-4 py-3 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-skj-gold/15 ${
+                      formErrors.phone ? 'border-skj-red' : 'border-skj-border focus:border-skj-gold'
                     }`}
                   />
                   {formErrors.phone && (
@@ -303,8 +319,8 @@ export default function CartClient() {
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     placeholder="Enter your full delivery address"
                     rows="3"
-                    className={`w-full px-4 py-3 rounded-xl text-sm border bg-white focus:outline-none transition-colors resize-none ${
-                      formErrors.address ? 'border-skj-red' : 'border-skj-border focus:border-skj-olive'
+                    className={`w-full resize-none rounded-2xl border bg-white px-4 py-3 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-skj-gold/15 ${
+                      formErrors.address ? 'border-skj-red' : 'border-skj-border focus:border-skj-gold'
                     }`}
                   />
                   {formErrors.address && (
@@ -325,8 +341,8 @@ export default function CartClient() {
                     onChange={(e) => setPinCode(e.target.value)}
                     placeholder="Enter your 6-digit PIN code"
                     maxLength={6}
-                    className={`w-full px-4 py-3 rounded-xl text-sm border bg-white focus:outline-none transition-colors ${
-                      formErrors.pincode ? 'border-skj-red' : 'border-skj-border focus:border-skj-olive'
+                    className={`w-full rounded-2xl border bg-white px-4 py-3 text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-skj-gold/15 ${
+                      formErrors.pincode ? 'border-skj-red' : 'border-skj-border focus:border-skj-gold'
                     }`}
                   />
                   {formErrors.pincode && (
@@ -337,13 +353,13 @@ export default function CartClient() {
                 </div>
               </div>
 
-              <div className="flex gap-4 mt-8">
+              <div className="mt-6 flex gap-3">
                 <button
                   onClick={() => {
                     setShowCheckout(false);
                     setFormErrors({});
                   }}
-                  className="flex-1 py-3.5 rounded-xl text-sm font-bold text-[#E53E3E] border border-[#E53E3E] hover:bg-red-50 transition-colors"
+                  className="inline-flex flex-1 items-center justify-center rounded-2xl border border-[#E53E3E]/70 py-3.5 text-sm font-bold text-[#E53E3E] transition-colors hover:bg-red-50"
                 >
                   Cancel
                 </button>
@@ -355,7 +371,7 @@ export default function CartClient() {
                       setShowCheckout(false);
                     }
                   }}
-                  className="flex-1 py-3.5 rounded-xl text-sm font-bold text-white bg-[#25D366] hover:bg-[#1DA851] flex items-center justify-center gap-2 transition-colors shadow-md shadow-green-500/20"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-md shadow-green-500/20 transition-all hover:-translate-y-0.5 hover:bg-[#1DA851]"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>

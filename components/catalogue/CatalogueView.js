@@ -7,9 +7,10 @@ import {
   Search, SlidersHorizontal, X, ChevronDown,
   LayoutGrid, List,
 } from 'lucide-react';
-import { getProductsByRoute, getCategories, getPurityOptions, filterAndSortProducts } from '@/lib/api';
+import { getAllProducts, getProductsByRoute, getCategories, getPurityOptions, filterAndSortProducts } from '@/lib/api';
 import { formatPrice } from '@/lib/utils';
 import ProductCard from '@/components/product/ProductCard';
+import { getProductSectionLabel, sectionHasCategory } from '@/data/productSections';
 
 const sortOptions = [
   { value: 'featured', label: 'Featured' },
@@ -19,13 +20,20 @@ const sortOptions = [
   { value: 'name', label: 'Name: A to Z' },
 ];
 
-export default function CatalogueView({ material, audience }) {
+export default function CatalogueView({ material, section, audience, categoryName }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const activeSection = section || audience || '';
+  const isGlobalCatalogue = !material && !activeSection;
+  const showCategoryFilter = isGlobalCatalogue || sectionHasCategory(activeSection);
 
   // Read initial filter state from URL
-  const initialCategories = searchParams.get('category') ? searchParams.get('category').split(',') : [];
+  const initialCategories = searchParams.get('category')
+    ? searchParams.get('category').split(',')
+    : categoryName
+      ? [categoryName]
+      : [];
   const initialSearch = searchParams.get('search') || '';
   const initialSort = searchParams.get('sort') || 'featured';
   const initialPurity = searchParams.get('purity') || '';
@@ -38,11 +46,13 @@ export default function CatalogueView({ material, audience }) {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [weightRange, setWeightRange] = useState({ min: '', max: '' });
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [visibleProductCount, setVisibleProductCount] = useState(9);
 
   // Initial static fallback products for instant rendering
   const staticProducts = useMemo(
-    () => getProductsByRoute(material, audience),
-    [material, audience]
+    () => isGlobalCatalogue ? getAllProducts() : getProductsByRoute(material, activeSection),
+    [material, activeSection, isGlobalCatalogue]
   );
 
   const [allProducts, setAllProducts] = useState(staticProducts);
@@ -51,7 +61,11 @@ export default function CatalogueView({ material, audience }) {
   useEffect(() => {
     async function fetchDynamicProducts() {
       try {
-        const res = await fetch(`/api/products?material=${material}&audience=${audience}`);
+        const params = new URLSearchParams();
+        if (material) params.set('material', material);
+        if (activeSection) params.set('section', activeSection);
+        const query = params.toString();
+        const res = await fetch(`/api/products${query ? `?${query}` : ''}`);
         const data = await res.json();
         if (data.products && Array.isArray(data.products)) {
           setAllProducts(data.products);
@@ -61,12 +75,13 @@ export default function CatalogueView({ material, audience }) {
       }
     }
     fetchDynamicProducts();
-  }, [material, audience]);
+  }, [material, activeSection]);
 
   const categories = useMemo(() => {
+    if (!showCategoryFilter) return [];
     const cats = [...new Set(allProducts.map((p) => p.category))];
-    return cats.sort();
-  }, [allProducts]);
+    return cats.filter(Boolean).sort();
+  }, [allProducts, showCategoryFilter]);
 
   const purityOptions = useMemo(() => {
     return [...new Set(allProducts.map((p) => p.purity))].sort();
@@ -75,6 +90,7 @@ export default function CatalogueView({ material, audience }) {
   // Apply filters and sorting
   const filteredProducts = useMemo(() => {
     const filters = {
+      section: activeSection,
       category: selectedCategories.length > 0 ? selectedCategories : undefined,
       purity: selectedPurity || undefined,
       search: searchQuery || undefined,
@@ -85,7 +101,41 @@ export default function CatalogueView({ material, audience }) {
       maxWeight: weightRange.max ? Number(weightRange.max) : undefined,
     };
     return filterAndSortProducts(allProducts, filters, sortBy);
-  }, [allProducts, selectedCategories, selectedPurity, searchQuery, sortBy, inStockOnly, priceRange, weightRange]);
+  }, [allProducts, activeSection, selectedCategories, selectedPurity, searchQuery, sortBy, inStockOnly, priceRange, weightRange]);
+
+  // Keep the first batch compact on phones and progressively reveal more products.
+  useEffect(() => {
+    const updateViewport = () => {
+      const mobile = window.matchMedia('(max-width: 767px)').matches;
+      setIsMobileViewport(mobile);
+      setVisibleProductCount((currentCount) => {
+        const firstBatchSize = mobile ? 8 : 9;
+        return currentCount < firstBatchSize ? firstBatchSize : currentCount;
+      });
+    };
+
+    updateViewport();
+    window.addEventListener('resize', updateViewport);
+    return () => window.removeEventListener('resize', updateViewport);
+  }, []);
+
+  // A new search/filter result should always start from its first batch.
+  useEffect(() => {
+    setVisibleProductCount(isMobileViewport ? 8 : 9);
+  }, [
+    allProducts,
+    activeSection,
+    selectedCategories,
+    selectedPurity,
+    searchQuery,
+    sortBy,
+    inStockOnly,
+    priceRange,
+    weightRange,
+    isMobileViewport,
+  ]);
+
+  const visibleProducts = filteredProducts.slice(0, visibleProductCount);
 
   // Update URL params when filters change
   const updateURL = useCallback(
@@ -142,14 +192,27 @@ export default function CatalogueView({ material, audience }) {
   };
 
   const materialLabel = material === 'gold' ? 'Gold' : 'Silver';
-  const audienceLabel = audience === 'men' ? 'Men' : 'Women';
-  const pageTitle = `${materialLabel} Jewellery for ${audienceLabel}`;
+  const sectionLabel = activeSection ? getProductSectionLabel(activeSection) : '';
+  const pageTitle = isGlobalCatalogue
+    ? categoryName ? `${categoryName} Jewellery` : 'All Jewellery'
+    : showCategoryFilter
+      ? `${materialLabel} Jewellery for ${sectionLabel}`
+      : `${materialLabel} ${sectionLabel}`;
+  const pageDescription = isGlobalCatalogue
+    ? categoryName
+      ? `Explore gold and silver ${categoryName.toLowerCase()} designs for women and men.`
+      : 'Explore handcrafted gold and silver jewellery for every style and occasion.'
+    : showCategoryFilter
+      ? `Explore our collection of ${materialLabel.toLowerCase()} jewellery designed for ${sectionLabel.toLowerCase()}.`
+      : activeSection === 'coins'
+        ? `Explore our ${materialLabel.toLowerCase()} coins, crafted for gifting, collecting, and special occasions.`
+        : `Explore our ${materialLabel.toLowerCase()} articles and traditional pieces for your home and celebrations.`;
 
   // Shared filter panel content
   const FilterContent = () => (
-    <div className="bg-white rounded-2xl shadow-sm border border-skj-border/60 p-6 space-y-8 max-h-[calc(100vh-140px)] overflow-y-auto custom-scrollbar">
-      {/* Categories */}
-      <div>
+    <div className="max-h-[calc(100vh-140px)] space-y-8 overflow-y-auto rounded-3xl border border-skj-gold/20 bg-white/95 p-5 shadow-[0_14px_35px_rgba(54,24,29,0.08)] custom-scrollbar sm:p-6">
+      {/* Categories are only relevant to Women and Men jewellery. */}
+      {showCategoryFilter && <div>
         <h3 className="text-xs font-bold uppercase tracking-widest text-skj-charcoal mb-4"
           style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
           Category
@@ -180,7 +243,7 @@ export default function CatalogueView({ material, audience }) {
             );
           })}
         </div>
-      </div>
+      </div>}
 
       {/* Purity */}
       {purityOptions.length > 0 && (
@@ -197,8 +260,8 @@ export default function CatalogueView({ material, audience }) {
                 className={`px-3 py-1.5 text-xs font-medium border transition-colors ${
                   selectedPurity === p
                     ? 'border-skj-olive bg-skj-olive text-white'
-                    : 'border-skj-border text-skj-charcoal hover:border-skj-olive'
-                }`}
+                    : 'border-skj-border text-skj-charcoal hover:border-skj-olive hover:bg-skj-ivory'
+                } rounded-full`}
               >
                 {p}
               </button>
@@ -219,7 +282,7 @@ export default function CatalogueView({ material, audience }) {
             placeholder="Min"
             value={priceRange.min}
             onChange={(e) => setPriceRange((prev) => ({ ...prev, min: e.target.value }))}
-            className="w-full px-3 py-2 text-sm border border-skj-border bg-white focus:outline-none focus:border-skj-olive"
+            className="w-full rounded-xl border border-skj-border bg-white px-3 py-2 text-sm focus:border-skj-gold focus:outline-none focus:ring-2 focus:ring-skj-gold/15"
             min="0"
           />
           <span className="text-skj-muted self-center text-sm">–</span>
@@ -228,7 +291,7 @@ export default function CatalogueView({ material, audience }) {
             placeholder="Max"
             value={priceRange.max}
             onChange={(e) => setPriceRange((prev) => ({ ...prev, max: e.target.value }))}
-            className="w-full px-3 py-2 text-sm border border-skj-border bg-white focus:outline-none focus:border-skj-olive"
+            className="w-full rounded-xl border border-skj-border bg-white px-3 py-2 text-sm focus:border-skj-gold focus:outline-none focus:ring-2 focus:ring-skj-gold/15"
             min="0"
           />
         </div>
@@ -246,7 +309,7 @@ export default function CatalogueView({ material, audience }) {
             placeholder="Min"
             value={weightRange.min}
             onChange={(e) => setWeightRange((prev) => ({ ...prev, min: e.target.value }))}
-            className="w-full px-3 py-2 text-sm border border-skj-border bg-white focus:outline-none focus:border-skj-olive"
+            className="w-full rounded-xl border border-skj-border bg-white px-3 py-2 text-sm focus:border-skj-gold focus:outline-none focus:ring-2 focus:ring-skj-gold/15"
             min="0"
           />
           <span className="text-skj-muted self-center text-sm">–</span>
@@ -255,7 +318,7 @@ export default function CatalogueView({ material, audience }) {
             placeholder="Max"
             value={weightRange.max}
             onChange={(e) => setWeightRange((prev) => ({ ...prev, max: e.target.value }))}
-            className="w-full px-3 py-2 text-sm border border-skj-border bg-white focus:outline-none focus:border-skj-olive"
+            className="w-full rounded-xl border border-skj-border bg-white px-3 py-2 text-sm focus:border-skj-gold focus:outline-none focus:ring-2 focus:ring-skj-gold/15"
             min="0"
           />
         </div>
@@ -278,7 +341,7 @@ export default function CatalogueView({ material, audience }) {
       {activeFilterCount > 0 && (
         <button
           onClick={clearAllFilters}
-          className="w-full py-2 text-sm text-skj-red font-medium hover:bg-red-50 transition-colors border border-skj-red/20"
+          className="w-full rounded-full border border-skj-red/20 py-2 text-sm font-medium text-skj-red transition-colors hover:bg-red-50"
         >
           Clear All Filters
         </button>
@@ -287,10 +350,10 @@ export default function CatalogueView({ material, audience }) {
   );
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen bg-skj-ivory/60">
 
       {/* Page header */}
-      <div className="bg-skj-ivory/50 border-b border-skj-border/30">
+      <div className="border-b border-skj-gold/15 bg-gradient-to-b from-skj-ivory to-white/80">
         <div className="section-container py-6 sm:py-8">
           <h1
             className="text-2xl sm:text-3xl font-semibold text-skj-charcoal mb-1"
@@ -299,12 +362,12 @@ export default function CatalogueView({ material, audience }) {
             {pageTitle}
           </h1>
           <p className="text-sm text-skj-muted">
-            Explore our collection of {materialLabel.toLowerCase()} jewellery designed for {audienceLabel.toLowerCase()}.
+            {pageDescription}
           </p>
         </div>
       </div>
 
-      <div className="section-container py-6">
+      <div className="section-container py-7 lg:py-8">
         {/* Toolbar: Search, Sort, Mobile filter toggle */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           {/* Search */}
@@ -315,7 +378,7 @@ export default function CatalogueView({ material, audience }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full pl-10 pr-4 py-2.5 text-sm border border-skj-border bg-white focus:outline-none focus:border-skj-olive transition-colors"
+              className="w-full rounded-2xl border border-skj-border bg-white/95 py-3 pl-10 pr-4 text-sm shadow-sm transition-all focus:border-skj-gold focus:outline-none focus:ring-2 focus:ring-skj-gold/15"
             />
             {searchQuery && (
               <button
@@ -333,7 +396,7 @@ export default function CatalogueView({ material, audience }) {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="appearance-none w-full sm:w-[200px] px-4 py-2.5 pr-10 text-sm border border-skj-border bg-white focus:outline-none focus:border-skj-olive cursor-pointer"
+              className="w-full cursor-pointer appearance-none rounded-2xl border border-skj-border bg-white/95 px-4 py-3 pr-10 text-sm shadow-sm focus:border-skj-gold focus:outline-none focus:ring-2 focus:ring-skj-gold/15 sm:w-[200px]"
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -347,7 +410,7 @@ export default function CatalogueView({ material, audience }) {
           {/* Mobile filter toggle */}
           <button
             onClick={() => setMobileFiltersOpen(true)}
-            className="lg:hidden flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border border-skj-border hover:border-skj-olive transition-colors"
+            className="flex items-center justify-center gap-2 rounded-2xl border border-skj-border bg-white/80 px-4 py-3 text-sm font-medium transition-colors hover:border-skj-olive hover:bg-white lg:hidden"
           >
             <SlidersHorizontal size={16} />
             Filters
@@ -363,7 +426,7 @@ export default function CatalogueView({ material, audience }) {
         {activeFilterCount > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
             {selectedCategories.map(cat => (
-              <span key={cat} className="inline-flex items-center gap-1 px-3 py-1 bg-skj-olive/10 text-skj-olive text-xs font-medium rounded-full">
+              <span key={cat} className="inline-flex items-center gap-1 rounded-full bg-skj-olive/10 px-3 py-1 text-xs font-medium text-skj-olive">
                 {cat}
                 <button onClick={() => setSelectedCategories(prev => prev.filter(c => c !== cat))} aria-label={`Remove ${cat} filter`}>
                   <X size={12} />
@@ -371,7 +434,7 @@ export default function CatalogueView({ material, audience }) {
               </span>
             ))}
             {selectedPurity && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-skj-olive/10 text-skj-olive text-xs font-medium">
+              <span className="inline-flex items-center gap-1 rounded-full bg-skj-olive/10 px-3 py-1 text-xs font-medium text-skj-olive">
                 {selectedPurity}
                 <button onClick={() => setSelectedPurity('')} aria-label={`Remove ${selectedPurity} filter`}>
                   <X size={12} />
@@ -379,7 +442,7 @@ export default function CatalogueView({ material, audience }) {
               </span>
             )}
             {inStockOnly && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-skj-olive/10 text-skj-olive text-xs font-medium">
+              <span className="inline-flex items-center gap-1 rounded-full bg-skj-olive/10 px-3 py-1 text-xs font-medium text-skj-olive">
                 In Stock
                 <button onClick={() => setInStockOnly(false)} aria-label="Remove in-stock filter">
                   <X size={12} />
@@ -390,8 +453,9 @@ export default function CatalogueView({ material, audience }) {
         )}
 
         {/* Product count */}
-        <p className="text-xs text-skj-muted mb-4">
-          {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'} found
+        <p className="mb-4 text-xs font-medium uppercase tracking-wider text-skj-muted">
+          Showing {Math.min(visibleProductCount, filteredProducts.length)} of {filteredProducts.length}{' '}
+          {filteredProducts.length === 1 ? 'product' : 'products'}
         </p>
 
         {/* Main content: Sidebar + Product grid */}
@@ -412,11 +476,24 @@ export default function CatalogueView({ material, audience }) {
           {/* Product grid */}
           <div className="flex-1">
             {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-                {filteredProducts.map((product) => (
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+                  {visibleProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+                  ))}
+                </div>
+                {visibleProductCount < filteredProducts.length && (
+                  <div className="mt-8 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={() => setVisibleProductCount((count) => count + (isMobileViewport ? 8 : 9))}
+                      className="btn-secondary min-w-[170px] justify-center"
+                    >
+                      Load more products
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
               /* Empty state */
               <div className="text-center py-20 px-4">
@@ -453,8 +530,8 @@ export default function CatalogueView({ material, audience }) {
             onClick={() => setMobileFiltersOpen(false)}
             aria-hidden="true"
           />
-          <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] bg-white overflow-y-auto animate-slideUp">
-            <div className="sticky top-0 bg-white border-b border-skj-border flex items-center justify-between px-5 py-3 z-10">
+          <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-3xl bg-skj-ivory animate-slideUp">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-skj-border bg-white/95 px-5 py-3 backdrop-blur">
               <h2 className="text-sm font-semibold text-skj-charcoal uppercase tracking-wider"
                 style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                 Filters
@@ -470,7 +547,7 @@ export default function CatalogueView({ material, audience }) {
             <div className="p-5">
               <FilterContent />
             </div>
-            <div className="sticky bottom-0 bg-white border-t border-skj-border p-4">
+            <div className="sticky bottom-0 border-t border-skj-border bg-white/95 p-4 backdrop-blur">
               <button
                 onClick={() => setMobileFiltersOpen(false)}
                 className="btn-primary w-full justify-center"

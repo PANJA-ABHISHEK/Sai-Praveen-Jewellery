@@ -1,197 +1,79 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { MapPin, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, BadgeCheck, Gem, HeartHandshake, MapPin, Phone, ShieldCheck, Sparkles, Users } from 'lucide-react';
+import siteConfig from '@/lib/config';
+import AboutAnimations from '@/components/about/AboutAnimations';
+import SocialLinks from '@/components/common/SocialLinks';
+import { STATIC_MEDIA } from '@/data/media';
+
+const showroomImages = {
+  exterior: 'https://res.cloudinary.com/g3ycdrt0/image/upload/v1792748491/sai_praveen/about/shop-img1_jqvior.jpg',
+  evening: 'https://res.cloudinary.com/g3ycdrt0/image/upload/v1792748493/sai_praveen/about/shop-img2_nikmo4.jpg',
+  entrance: 'https://res.cloudinary.com/g3ycdrt0/image/upload/v1792748494/sai_praveen/about/shop-img3_jypvu7.jpg',
+  inside: 'https://res.cloudinary.com/g3ycdrt0/image/upload/v1792748498/sai_praveen/about/shop-inside-img4_r98ieb.jpg',
+};
+
+const values = [
+  { icon: Gem, title: 'Thoughtful craftsmanship', description: 'Explore jewellery chosen for its detail, character and the care behind every design.' },
+  { icon: ShieldCheck, title: 'Purity you can trust', description: 'Discover hallmarked gold and quality silver with clear guidance from our team.' },
+  { icon: HeartHandshake, title: 'Personal service', description: 'A welcoming place to find a meaningful piece for every milestone and everyday moment.' },
+];
+
+const collections = [
+  { title: 'Gold for every occasion', subtitle: 'Traditional detail, made to be treasured', href: '/gold/women', image: STATIC_MEDIA.hero.bridalGold, alt: 'Traditional gold bridal jewellery' },
+  { title: 'Silver with a modern spirit', subtitle: 'Beautiful finishing for everyday wear', href: '/silver/women', image: STATIC_MEDIA.hero.sterlingSilver, alt: 'Elegant sterling silver jewellery' },
+  { title: 'Distinctive designs for him', subtitle: 'A considered collection of classic pieces', href: '/gold/men', image: STATIC_MEDIA.hero.mensCollection, alt: "Men's jewellery collection" },
+];
+
+const storeAddress = [siteConfig.address.line1, siteConfig.address.line2, siteConfig.address.city, `${siteConfig.address.state} ${siteConfig.address.pincode}`].join(', ');
+const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${siteConfig.businessName}, ${storeAddress}`)}`;
+const embeddedMapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${siteConfig.businessName}, ${storeAddress}`)}&output=embed`;
 
 export const metadata = {
-  title: 'About Sai Praveen Jewellery | Ravulapalem',
-  description:
-    'Discover Sai Praveen Jewellery in Ravulapalem, Andhra Pradesh. Explore our jewellery collections and learn more about our brand.',
+  title: 'About Sai Praveen Jewellery | Vijayawada',
+  description: 'Step inside Sai Praveen Jewellery in Patamata, Vijayawada: a welcoming showroom for trusted gold and silver jewellery.',
 };
 
 export default function AboutPage() {
   return (
-    <div className="bg-white min-h-screen">
+    <main className="overflow-hidden bg-white text-skj-charcoal">
+      <AboutAnimations />
 
-      {/* Hero section */}
-      <section className="bg-skj-ivory text-skj-charcoal relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-skj-olive/5 hidden lg:block" />
-        <div className="section-container relative z-10">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center pt-8 pb-12 lg:pt-12 lg:pb-20">
-            <div className="max-w-xl order-2 lg:order-1">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-skj-olive mb-4 block" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                Sai Praveen Jewellery
-              </span>
-              <h1
-                className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-6"
-                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-              >
-                Jewellery That Celebrates Tradition
-              </h1>
-              <div className="space-y-4 mb-8 border-l-2 border-skj-olive/30 pl-4">
-                <p className="text-base text-skj-muted leading-relaxed">
-                  Discover the timeless beauty of Indian jewellery, bringing elegance to your celebrations, traditions and treasured moments.
-                </p>
-                <p className="text-base text-skj-muted leading-relaxed">
-                  Located in the heart of Ravulapalem, Andhra Pradesh, Sai Praveen Jewellery has been a trusted destination for families seeking authentic craftsmanship and pure gold designs. We invite you to explore collections that complement your individual style while honouring cultural heritage.
-                </p>
-              </div>
-              <Link href="/gold/women" className="btn-primary rounded-full px-8 py-3.5">
-                Explore Our Collection
-              </Link>
+      <section className="relative overflow-hidden bg-[#5B2632] text-white">
+        <div className="section-container relative grid items-center gap-9 py-10 sm:py-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16 lg:py-20">
+          <div className="order-2 text-center lg:order-1 lg:text-left" data-aos="fade-right">
+            <p className="mb-4 inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-skj-gold"><span className="h-px w-9 bg-skj-gold" /> The SPJ story <span className="h-px w-9 bg-skj-gold sm:hidden" /></p>
+            <h1 className="mx-auto max-w-xl font-heading text-4xl font-semibold leading-[1.08] sm:text-5xl lg:mx-0 lg:text-[4.35rem]">Jewellery chosen for the moments that stay with you.</h1>
+            <p className="mx-auto mt-5 max-w-lg text-sm leading-7 text-white/80 sm:text-base lg:mx-0">At Sai Praveen Jewellery, every visit begins with a warm welcome and ends with a choice that feels truly yours. Discover trusted gold and silver designs in the heart of Patamata, Vijayawada.</p>
+            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+              <Link href="/gold/collections" className="btn-primary rounded-full px-7 py-3.5">Explore collections <ArrowUpRight size={16} /></Link>
+              <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/12 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-skj-gold hover:bg-white/20">Plan your visit <MapPin size={16} className="text-skj-gold" /></Link>
             </div>
-            {/* Hero Image */}
-            <div className="relative w-full h-[350px] lg:h-[420px] max-w-sm lg:max-w-md mx-auto lg:ml-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white order-1 lg:order-2">
-              <Image
-                src="/images/skjshop1.png"
-                alt="Sai Praveen Jewellery Store"
-                fill
-                className="object-cover object-top"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-              />
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70 lg:justify-start"><span className="inline-flex items-center gap-2"><BadgeCheck size={16} className="text-skj-gold" /> Hallmarked purity</span><span className="inline-flex items-center gap-2"><Sparkles size={16} className="text-skj-gold" /> Thoughtful designs</span></div>
+            <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row lg:justify-start"><span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/65">Follow our latest designs</span><SocialLinks /></div>
+          </div>
+          <div className="relative order-1 mx-auto w-full max-w-2xl lg:order-2 lg:mx-0" data-aos="zoom-in" data-aos-duration="950">
+            <div className="absolute -inset-3 rounded-[2rem] border border-skj-gold/45 sm:-inset-5" aria-hidden="true" />
+            <div className="group relative aspect-[4/3] overflow-hidden rounded-[1.6rem] border border-skj-gold/35 bg-[#E9DFD5] shadow-[0_30px_90px_rgba(53,20,30,0.16)] sm:rounded-[2rem]">
+              <Image src={showroomImages.exterior} alt="Sai Praveen Jewellery showroom exterior in Vijayawada" fill priority sizes="(max-width: 1024px) 100vw, 58vw" className="object-contain transition-transform duration-1000 group-hover:scale-[1.02]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-skj-deep-olive/75 via-transparent to-transparent" aria-hidden="true" />
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white sm:p-7"><div><p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-skj-gold">Our showroom</p><p className="mt-1 font-heading text-xl font-semibold sm:text-2xl">Patamata · Vijayawada</p></div><span className="hidden rounded-full border border-white/25 bg-white/10 px-3 py-2 text-[10px] font-medium text-white/85 backdrop-blur-sm sm:block">A warm welcome, every time</span></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Our Story */}
-      <section className="section-spacing bg-white">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto text-center">
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-skj-olive mb-4"
-              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-            >
-              Our Story
-            </p>
-            <p className="text-lg sm:text-xl text-skj-charcoal leading-relaxed font-medium" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              “At Sai Praveen Jewellery, jewellery represents more than beauty — it reflects tradition, personal style and the special moments that bring families together. Located in Ravulapalem, Andhra Pradesh, we invite customers to discover jewellery that complements their celebrations, cultural traditions and individual style.”
-            </p>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-skj-olive to-skj-gold mx-auto mt-8" aria-hidden="true" />
-          </div>
-        </div>
-      </section>
+      <section className="border-b border-skj-border/55 bg-white"><div className="section-container grid grid-cols-3 divide-x divide-skj-border/60 py-7 text-center sm:py-9"><div className="px-2 sm:px-4" data-aos="fade-up"><p className="font-heading text-2xl font-semibold text-skj-olive sm:text-4xl">22K</p><p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-skj-muted sm:text-xs">Gold purity</p></div><div className="px-2 sm:px-4" data-aos="fade-up" data-aos-delay="100"><p className="font-heading text-2xl font-semibold text-skj-olive sm:text-4xl">925</p><p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-skj-muted sm:text-xs">Sterling silver</p></div><div className="px-2 sm:px-4" data-aos="fade-up" data-aos-delay="200"><p className="font-heading text-2xl font-semibold text-skj-olive sm:text-4xl">100%</p><p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-skj-muted sm:text-xs">Hallmarked</p></div></div></section>
 
-      {/* Tradition & Meaning */}
-      <section className="section-spacing bg-[#D2C5AF] text-skj-charcoal">
-        <div className="section-container">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-skj-charcoal/10">
-              <Image
-                src="/images/hero/hero_temple_jewellery_1791637822451.jpg"
-                alt="Traditional temple jewellery highlighting Indian heritage"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-            <div>
-              <p
-                className="text-xs font-semibold uppercase tracking-[0.2em] text-skj-deep-olive mb-4"
-                style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-              >
-                Tradition & Meaning
-              </p>
-              <h2
-                className="text-3xl sm:text-4xl font-semibold mb-6 leading-tight"
-                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-              >
-                Honouring Life's <br className="hidden sm:block" /> Greatest Milestones
-              </h2>
-              <div className="space-y-4 text-sm text-skj-charcoal/80 leading-relaxed">
-                <p>
-                  Indian jewellery is steeped in significance. It is not merely an accessory, but a symbol of love, heritage, and prosperity passed down through generations.
-                </p>
-                <p>
-                  From the heavy temple necklaces that adorn brides on their wedding day, to the delicate silver anklets given to a newborn, every piece tells a story. At Sai Praveen Jewellery, we take pride in being a part of these cherished family traditions, offering pieces that become modern heirlooms.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="section-spacing bg-skj-ivory"><div className="section-container grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16"><div className="text-center lg:text-left" data-aos="fade-right"><p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.26em] text-skj-olive">More than a jewellery store</p><h2 className="mx-auto max-w-2xl font-heading text-3xl font-semibold leading-tight sm:text-4xl lg:mx-0 lg:text-5xl">A familiar place for meaningful choices.</h2><div className="mx-auto mt-5 max-w-2xl space-y-4 text-sm leading-7 text-skj-muted sm:text-base lg:mx-0"><p>Whether you are choosing bridal jewellery, marking a family celebration or finding an everyday favourite, our showroom is designed to make the process calm, personal and clear.</p><p>Take your time, compare every detail and let our team help you find a piece that belongs in your story.</p></div><Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-skj-olive transition hover:text-skj-deep-olive">Talk to our team <ArrowUpRight size={16} /></Link></div><div className="relative mx-auto w-full max-w-xl" data-aos="fade-left"><div className="absolute -bottom-4 -left-4 -z-0 h-28 w-28 rounded-full border border-skj-gold/40" aria-hidden="true" /><div className="group relative aspect-[4/3] overflow-hidden rounded-[1.6rem] border-8 border-white bg-[#E9DFD5] shadow-[0_22px_60px_rgba(53,20,30,0.16)] sm:rounded-[2rem]"><Image src={showroomImages.evening} alt="Sai Praveen Jewellery showroom glowing at evening" fill sizes="(max-width: 1024px) 100vw, 46vw" className="object-contain transition-transform duration-1000 group-hover:scale-[1.02]" /><div className="absolute inset-x-4 bottom-4 rounded-xl border border-white/20 bg-skj-deep-olive/80 px-4 py-3 text-white backdrop-blur-sm sm:inset-x-6 sm:bottom-6"><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-skj-gold">A warm welcome, every time</p><p className="mt-1 font-heading text-lg font-semibold">Designed for unhurried choices.</p></div></div></div></div></section>
 
-      {/* Discover Our Collections */}
-      <section className="section-spacing bg-skj-ivory">
-        <div className="section-container">
-          <div className="text-center mb-12">
-            <h2 className="section-title">Discover Our Collections</h2>
-            <span className="section-divider" aria-hidden="true" />
-          </div>
+      <section className="section-spacing bg-white"><div className="section-container"><div className="mx-auto mb-9 max-w-2xl text-center sm:mb-12" data-aos="fade-up"><p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.26em] text-skj-olive">Inside the house</p><h2 className="section-title">A showroom made for taking your time.</h2><span className="section-divider" aria-hidden="true" /><p className="section-subtitle !mb-0">See the bright, welcoming spaces where families explore designs, ask questions and make important choices with confidence.</p></div><div className="grid items-start gap-4 lg:grid-cols-[0.76fr_1.24fr] lg:gap-6"><div className="group relative aspect-[3/4] overflow-hidden rounded-[1.6rem] bg-skj-deep-olive" data-aos="fade-up"><Image src={showroomImages.entrance} alt="Sai Praveen Jewellery entrance and illuminated showroom sign" fill sizes="(max-width: 1024px) 100vw, 36vw" className="object-contain transition-transform duration-1000 group-hover:scale-[1.02]" /><div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" aria-hidden="true" /><div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7"><p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-skj-gold">Step inside</p><h3 className="mt-1 font-heading text-2xl font-semibold sm:text-3xl">A distinctive SPJ welcome.</h3></div></div><div className="group relative aspect-[4/3] overflow-hidden rounded-[1.6rem] bg-skj-deep-olive" data-aos="fade-up" data-aos-delay="120"><Image src={showroomImages.inside} alt="Customers exploring gold jewellery inside Sai Praveen Jewellery showroom" fill sizes="(max-width: 1024px) 100vw, 62vw" className="object-contain transition-transform duration-1000 group-hover:scale-[1.02]" /><div className="absolute inset-0 bg-gradient-to-t from-skj-deep-olive/80 via-transparent to-transparent" aria-hidden="true" /><div className="absolute right-4 top-4 flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white backdrop-blur-md sm:right-6 sm:top-6"><Users size={14} className="text-skj-gold" /> A family experience</div><div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7"><p className="max-w-xl text-sm leading-6 text-white/75 sm:text-base">From bridal selections to everyday elegance, take your time and let our team help you find the right piece.</p></div></div></div></div></section>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link href="/gold/women?category=Necklaces" className="group block relative aspect-[5/4] overflow-hidden rounded-2xl bg-skj-deep-olive">
-              <Image
-                src="/images/hero/hero_bridal_gold_1791637796095.jpg"
-                alt="Gold Necklaces"
-                fill
-                className="object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
-                <h3 className="text-white text-xl font-semibold mb-1" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>Bridal Necklaces</h3>
-                <span className="text-skj-gold text-xs font-medium uppercase tracking-wider flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                  Explore <ArrowRight size={14} />
-                </span>
-              </div>
-            </Link>
-            
-            <Link href="/silver/men" className="group block relative aspect-[5/4] overflow-hidden rounded-2xl bg-skj-deep-olive">
-              <Image
-                src="/images/hero/hero_mens_collection_1791637835648.jpg"
-                alt="Men's Silver Collection"
-                fill
-                className="object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
-                <h3 className="text-white text-xl font-semibold mb-1" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>Men's Silver</h3>
-                <span className="text-skj-gold text-xs font-medium uppercase tracking-wider flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                  Explore <ArrowRight size={14} />
-                </span>
-              </div>
-            </Link>
+      <section className="section-spacing bg-skj-ivory"><div className="section-container"><div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10"><p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-skj-olive">What matters to us</p><h2 className="section-title">The SPJ experience</h2><span className="section-divider" aria-hidden="true" /><p className="section-subtitle !mb-0">Beautiful jewellery is only part of the experience. We care about the trust and service that come with it.</p></div><div className="grid gap-4 sm:grid-cols-3 sm:gap-5">{values.map(({ icon: Icon, title, description }, index) => <article key={title} data-aos="fade-up" data-aos-delay={index * 100} className="rounded-2xl border border-skj-border/70 bg-white p-6 text-center shadow-[0_8px_24px_rgba(53,20,30,0.04)] transition duration-300 hover:-translate-y-1 hover:border-skj-gold/60 hover:shadow-[0_14px_30px_rgba(53,20,30,0.09)] sm:p-7"><span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-skj-gold/40 bg-skj-ivory text-skj-olive"><Icon size={21} strokeWidth={1.7} /></span><h3 className="mb-2 font-heading text-lg font-semibold sm:text-xl">{title}</h3><p className="text-sm leading-6 text-skj-muted">{description}</p></article>)}</div></div></section>
 
-            <Link href="/silver/women" className="group block relative aspect-[5/4] overflow-hidden rounded-2xl bg-skj-deep-olive sm:hidden lg:block">
-              <Image
-                src="/images/hero/hero_sterling_silver_1791637808752.jpg"
-                alt="Sterling Silver Masterpieces"
-                fill
-                className="object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
-                <h3 className="text-white text-xl font-semibold mb-1" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>Sterling Silver</h3>
-                <span className="text-skj-gold text-xs font-medium uppercase tracking-wider flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                  Explore <ArrowRight size={14} />
-                </span>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <section className="section-spacing bg-white"><div className="section-container"><div className="mb-8 flex flex-col items-center gap-4 text-center sm:mb-10 lg:flex-row lg:items-end lg:justify-between lg:text-left"><div><p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-skj-olive">Find your favourite</p><h2 className="font-heading text-3xl font-semibold sm:text-4xl">Explore our collections</h2></div><Link href="/gold/collections" className="inline-flex items-center gap-2 text-sm font-semibold text-skj-olive transition hover:text-skj-deep-olive">View all collections <ArrowUpRight size={16} /></Link></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{collections.map((collection, index) => <Link key={collection.title} href={collection.href} data-aos="fade-up" data-aos-delay={index * 100} className="group relative block aspect-[5/4] overflow-hidden rounded-2xl bg-skj-deep-olive shadow-md"><Image src={collection.image} alt={collection.alt} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-skj-deep-olive/90 via-skj-deep-olive/10 to-transparent" /><div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6"><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-skj-gold">Sai Praveen Jewellery</p><h3 className="mt-1 font-heading text-xl font-semibold sm:text-2xl">{collection.title}</h3><p className="mt-1 text-xs text-white/75 sm:text-sm">{collection.subtitle}</p></div><span className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/40 bg-white/15 text-white backdrop-blur-sm transition group-hover:bg-white group-hover:text-skj-deep-olive"><ArrowUpRight size={17} /></span></Link>)}</div></div></section>
 
-      {/* Visit Our Store */}
-      <section className="section-spacing bg-white">
-        <div className="section-container">
-          <div className="text-center mb-8">
-            <h2 className="section-title">Visit Our Store</h2>
-            <span className="section-divider" aria-hidden="true" />
-          </div>
-          <div className="relative w-full max-w-5xl mx-auto h-[300px] sm:h-[400px] rounded-3xl overflow-hidden shadow-sm border border-skj-border/60">
-            {/* Embedded Google Map */}
-            <iframe
-              src="https://maps.google.com/maps?q=Sai+Praveen+Jewellery+Ravulapalem&t=&z=16&ie=UTF8&iwloc=&output=embed"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 grayscale-[15%] contrast-110"
-              title="Sai Praveen Jewellery Location Map"
-            ></iframe>
-            
-          </div>
-        </div>
-      </section>
-    </div>
+      <section className="section-spacing bg-skj-ivory"><div className="section-container"><div className="mb-8 text-center"><p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-skj-olive">Come say hello</p><h2 className="section-title">Visit our Vijayawada showroom</h2><span className="section-divider" aria-hidden="true" /></div><div className="grid overflow-hidden rounded-[1.6rem] border border-skj-border/70 bg-white shadow-[0_18px_50px_rgba(53,20,30,0.09)] lg:grid-cols-[0.8fr_1.2fr] sm:rounded-[2rem]"><div className="flex flex-col justify-center p-6 sm:p-9 lg:p-11" data-aos="fade-right"><span className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-skj-ivory text-skj-olive"><MapPin size={22} /></span><h3 className="mb-3 font-heading text-2xl font-semibold">Sai Praveen Jewellery</h3><address className="not-italic text-sm leading-7 text-skj-muted">{siteConfig.address.line1}<br />{siteConfig.address.line2}<br />{siteConfig.address.city}, {siteConfig.address.state} {siteConfig.address.pincode}</address><p className="mt-4 text-xs font-medium text-skj-muted">Open daily · 10:00 AM – 8:30 PM</p><div className="mt-6 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row"><a href={directionsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full bg-skj-deep-olive px-5 py-3 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-skj-olive">Get directions <ArrowUpRight size={15} /></a><a href={`tel:${siteConfig.phone}`} className="inline-flex items-center justify-center gap-2 rounded-full border border-skj-border px-5 py-3 text-xs font-semibold uppercase tracking-wider text-skj-charcoal transition hover:border-skj-gold hover:bg-skj-ivory"><Phone size={15} className="text-skj-olive" /> {siteConfig.phone}</a></div></div><div className="relative min-h-[280px] bg-skj-ivory sm:min-h-[360px]" data-aos="fade-left"><iframe src={embeddedMapUrl} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="absolute inset-0 h-full w-full" title="Map showing Sai Praveen Jewellery in Patamata, Vijayawada" /></div></div></div></section>
+    </main>
   );
 }

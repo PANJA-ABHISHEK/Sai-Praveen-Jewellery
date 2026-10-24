@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  Plus, LogOut, Search, Edit3, Trash2, PackageCheck, PackageX,
-  Loader2, RefreshCw, Sparkles, Filter, X, ChevronDown,
-  Layers, Gem, Shield, Coins, AlertTriangle, ArrowRight, CheckCircle2, History
+  Plus, Search, Edit3, Trash2, PackageCheck, PackageX,
+  Loader2, RefreshCw, X, ChevronDown,
+  Gem, Coins, AlertTriangle, CheckCircle2, History
 } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { DEFAULT_CATEGORIES } from '@/lib/categories';
+import { PRODUCT_SECTIONS, getProductSection, getProductSectionLabel, sectionHasCategory } from '@/data/productSections';
+import AdminShell from '@/components/admin/AdminShell';
+import { STATIC_MEDIA } from '@/data/media';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -22,9 +25,10 @@ export default function AdminDashboardPage() {
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
   const [filterMaterial, setFilterMaterial] = useState('all'); // all | gold | silver
-  const [filterAudience, setFilterAudience] = useState('all'); // all | women | men
+  const [filterSection, setFilterSection] = useState('all'); // all | women | men | coins | collections
   const [filterCategory, setFilterCategory] = useState('all'); // all | [categoryName]
   const [filterStock, setFilterStock] = useState('all');       // all | in_stock | out_of_stock
+  const [visibleProductCount, setVisibleProductCount] = useState(15);
 
   // Gold & Silver Rates Modal & Confirmation States
   const [ratesModalOpen, setRatesModalOpen] = useState(false);
@@ -228,17 +232,7 @@ export default function AdminDashboardPage() {
     }
   };
 
-  // 3. Handle Logout
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/admin/logout', { method: 'POST' });
-      router.push('/admin/login');
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
-  };
-
-  // 4. Toggle Stock Status
+  // 3. Toggle Stock Status
   const handleToggleStock = async (product) => {
     setActionLoadingId(product.id);
     const newStatus = product.stockStatus === 'in_stock' ? 'out_of_stock' : 'in_stock';
@@ -293,7 +287,7 @@ export default function AdminDashboardPage() {
   const handleResetFilters = () => {
     setSearchQuery('');
     setFilterMaterial('all');
-    setFilterAudience('all');
+    setFilterSection('all');
     setFilterCategory('all');
     setFilterStock('all');
   };
@@ -301,7 +295,7 @@ export default function AdminDashboardPage() {
   const isFilterActive =
     searchQuery.trim() !== '' ||
     filterMaterial !== 'all' ||
-    filterAudience !== 'all' ||
+    filterSection !== 'all' ||
     filterCategory !== 'all' ||
     filterStock !== 'all';
 
@@ -318,6 +312,7 @@ export default function AdminDashboardPage() {
   // Dynamic available categories list (combines inventory categories + persistent custom categories + defaults)
   const availableCategories = useMemo(() => {
     const inventoryCats = products
+      .filter((p) => sectionHasCategory(getProductSection(p)))
       .map((p) => p.category)
       .filter(Boolean);
     const combined = Array.from(new Set([...inventoryCats, ...dynamicCategories, ...DEFAULT_CATEGORIES]));
@@ -344,8 +339,8 @@ export default function AdminDashboardPage() {
         return false;
       }
 
-      // 3. Audience Filter (women / men)
-      if (filterAudience !== 'all' && p.audience !== filterAudience) {
+      // 3. Section Filter
+      if (filterSection !== 'all' && getProductSection(p) !== filterSection) {
         return false;
       }
 
@@ -361,7 +356,17 @@ export default function AdminDashboardPage() {
 
       return true;
     });
-  }, [products, searchQuery, filterMaterial, filterAudience, filterCategory, filterStock]);
+  }, [products, searchQuery, filterMaterial, filterSection, filterCategory, filterStock]);
+
+  // Keep the admin list compact and reveal the next batch only when requested.
+  useEffect(() => {
+    setVisibleProductCount(15);
+  }, [products, searchQuery, filterMaterial, filterSection, filterCategory, filterStock]);
+
+  const visibleProducts = useMemo(
+    () => filteredProducts.slice(0, visibleProductCount),
+    [filteredProducts, visibleProductCount]
+  );
 
   if (checkingAuth) {
     return (
@@ -372,134 +377,76 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4] text-gray-900 pb-20">
-      {/* Top Navbar */}
-      <header className="bg-white border-b border-[#EAE6DF] sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <Link href="/" target="_blank" className="hover:opacity-85 transition-opacity flex items-center gap-2 sm:gap-3 min-w-0">
-              <div
-                style={{ width: '38px', height: '38px', minWidth: '38px', minHeight: '38px' }}
-                className="rounded-full overflow-hidden flex items-center justify-center bg-white shadow-xs border border-stone-200 flex-shrink-0"
-              >
-                <img
-                  src="/logo.png"
-                  alt="Sai Praveen Jewellery"
-                  style={{ width: '38px', height: '38px', maxWidth: '38px', maxHeight: '38px', objectFit: 'contain' }}
-                  className="block rounded-full"
-                />
-              </div>
-              <div className="flex flex-col min-w-0 justify-center">
-                <span className="font-serif font-bold text-gray-900 text-xs sm:text-base leading-tight tracking-tight whitespace-nowrap">
-                  Sai Praveen Jewellery
-                </span>
-                <span className="text-[9px] sm:text-[10px] font-semibold text-[#C59B27] uppercase tracking-wider whitespace-nowrap">
-                  Admin Portal
-                </span>
-              </div>
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
-            {/* Gold/Silver Prices Button */}
-            <button
-              onClick={handleOpenRatesModal}
-              className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200/90 text-amber-900 text-xs sm:text-sm font-semibold rounded-xl flex items-center gap-1 sm:gap-1.5 transition-all shadow-xs cursor-pointer whitespace-nowrap"
-              title="Manage daily market gold & silver rates"
-            >
-              <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 flex-shrink-0" />
-              <span className="hidden sm:inline">Gold/Silver Prices</span>
-              <span className="sm:hidden">Prices</span>
-            </button>
-
-            <Link
-              href="/admin/add"
-              style={{ color: '#ffffff' }}
-              className="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-[#C8102E] hover:bg-[#A00D24] !text-white text-xs sm:text-sm font-semibold rounded-xl shadow-md shadow-[#C8102E]/20 flex items-center gap-1 sm:gap-1.5 transition-all cursor-pointer whitespace-nowrap"
-            >
-              <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 !text-white flex-shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
-              <span className="!text-white hidden sm:inline" style={{ color: '#ffffff' }}>Add Product</span>
-              <span className="!text-white sm:hidden" style={{ color: '#ffffff' }}>Add</span>
-            </Link>
-
-            <button
-              onClick={handleLogout}
-              title="Logout"
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors cursor-pointer flex-shrink-0"
-            >
-              <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+    <AdminShell
+      pageTitle="Products"
+      pageDescription="Manage your inventory and product catalogue."
+      actions={(
+        <>
+          <Link href="/admin/prices" className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-sm font-semibold text-amber-900 shadow-xs transition hover:bg-amber-100 sm:w-auto">
+            <Coins className="h-4 w-4 text-amber-700" />
+            Gold &amp; Silver Prices
+          </Link>
+          <Link href="/admin/add" className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#C8102E] px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#C8102E]/20 transition hover:bg-[#A00D24] sm:w-auto">
+            <Plus className="h-4 w-4" />
+            Add Product
+          </Link>
+        </>
+      )}
+    >
+      <main className="mx-auto max-w-7xl space-y-6 px-4 pb-20 pt-6 sm:px-6 lg:px-8 lg:pt-8">
         {/* Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {/* Total Products */}
-          <div className="bg-white p-6 rounded-2xl border border-[#E9E4DC] shadow-xs relative overflow-hidden group hover:border-[#C8102E]/30 transition-all">
+          <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E9E4DC] shadow-xs relative overflow-hidden group hover:border-[#C8102E]/30 transition-all">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Total Inventory
+                Total Products
               </span>
               <div className="w-9 h-9 rounded-xl bg-gray-50 border border-gray-100 text-gray-700 flex items-center justify-center">
-                <Layers className="w-4.5 h-4.5" />
+                <Gem className="w-4.5 h-4.5" />
               </div>
             </div>
             <div className="text-3xl font-bold text-gray-900 mt-2 font-serif">
               {metrics.total}
             </div>
-            <div className="flex items-center gap-2 mt-2 text-xs">
-              <span className="text-emerald-700 font-medium bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
-                {metrics.inStock} In Stock
-              </span>
-              {metrics.outOfStock > 0 && (
-                <span className="text-amber-700 font-medium bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60">
-                  {metrics.outOfStock} Out of Stock
-                </span>
-              )}
-            </div>
+            <span className="mt-2 block text-xs text-gray-400">All products in your catalogue</span>
           </div>
 
-          {/* Gold Collection */}
-          <div className="bg-white p-6 rounded-2xl border border-[#E9E4DC] shadow-xs relative overflow-hidden group hover:border-[#C9A34A]/50 transition-all">
+          {/* In Stock */}
+          <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E9E4DC] shadow-xs relative overflow-hidden group hover:border-emerald-300 transition-all">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Gold Collection
+                In Stock
               </span>
-              <div className="w-9 h-9 rounded-xl bg-[#FFF9EA] border border-[#F1E1B2] text-[#B38728] flex items-center justify-center">
-                <Gem className="w-4.5 h-4.5" />
+              <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center">
+                <PackageCheck className="w-4.5 h-4.5" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-[#B38728] mt-2 font-serif">
-              {metrics.gold}
+            <div className="text-3xl font-bold text-emerald-700 mt-2 font-serif">
+              {metrics.inStock}
             </div>
-            <span className="text-xs text-gray-400 mt-2 block">
-              22K & 24K Handcrafted Pieces
-            </span>
+            <span className="text-xs text-gray-400 mt-2 block">Products currently available</span>
           </div>
 
-          {/* Silver Collection */}
-          <div className="bg-white p-6 rounded-2xl border border-[#E9E4DC] shadow-xs relative overflow-hidden group hover:border-slate-300 transition-all">
+          {/* Out of Stock */}
+          <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E9E4DC] shadow-xs relative overflow-hidden group hover:border-rose-300 transition-all">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Silver Collection
+                Out of Stock
               </span>
-              <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 flex items-center justify-center">
-                <Shield className="w-4.5 h-4.5" />
+              <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center">
+                <PackageX className="w-4.5 h-4.5" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-gray-700 mt-2 font-serif">
-              {metrics.silver}
+            <div className="text-3xl font-bold text-rose-700 mt-2 font-serif">
+              {metrics.outOfStock}
             </div>
-            <span className="text-xs text-gray-400 mt-2 block">
-              92.5 Sterling & Pure Silver Articles
-            </span>
+            <span className="text-xs text-gray-400 mt-2 block">Products needing attention</span>
           </div>
         </div>
 
         {/* Enhanced Multi-Filter Control Center */}
-        <div className="bg-white p-5 rounded-2xl border border-[#E5E1D8] shadow-xs space-y-4">
+        <div className="grid grid-cols-1 gap-3 rounded-2xl border border-[#E5E1D8] bg-white p-4 shadow-xs sm:grid-cols-2 sm:p-5 lg:grid-cols-2 xl:grid-cols-[minmax(300px,2fr)_repeat(4,minmax(170px,1fr))]">
           {/* Search Box */}
           <div className="relative">
             <Search className="w-4 h-4 text-gray-400 absolute left-4 top-3.5 pointer-events-none" />
@@ -520,13 +467,10 @@ export default function AdminDashboardPage() {
             )}
           </div>
 
-          {/* 4 Dedicated Dropdowns: Material, Audience, Category, Stock Status */}
-          <div className="pt-3 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* 4 Dedicated Dropdowns: Material, Section, Category, Stock Status */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:contents">
             {/* 1. Material Dropdown */}
             <div>
-              <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-                Material
-              </label>
               <div className="relative">
                 <select
                   value={filterMaterial}
@@ -541,20 +485,18 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* 2. Audience Dropdown */}
+            {/* 2. Section Dropdown */}
             <div>
-              <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-                Audience / Section
-              </label>
               <div className="relative">
                 <select
-                  value={filterAudience}
-                  onChange={(e) => setFilterAudience(e.target.value)}
+                  value={filterSection}
+                  onChange={(e) => setFilterSection(e.target.value)}
                   className="w-full pl-3.5 pr-8 py-2 bg-[#FAF9F6] hover:bg-white border border-gray-200 rounded-xl text-xs sm:text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B0000] focus:bg-white transition-all appearance-none cursor-pointer"
                 >
-                  <option value="all">All Audiences (Women & Men)</option>
-                  <option value="women">Women</option>
-                  <option value="men">Men</option>
+                  <option value="all">All Sections</option>
+                  {PRODUCT_SECTIONS.map((item) => (
+                    <option key={item.id} value={item.id}>{item.label}</option>
+                  ))}
                 </select>
                 <ChevronDown className="w-4 h-4 text-gray-400 absolute right-3 top-2.5 pointer-events-none" />
               </div>
@@ -562,9 +504,6 @@ export default function AdminDashboardPage() {
 
             {/* 3. Category Dropdown */}
             <div>
-              <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-                Category
-              </label>
               <div className="relative">
                 <select
                   value={filterCategory}
@@ -584,9 +523,6 @@ export default function AdminDashboardPage() {
 
             {/* 4. Stock Availability Dropdown */}
             <div>
-              <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-                Stock Availability
-              </label>
               <div className="relative">
                 <select
                   value={filterStock}
@@ -604,7 +540,7 @@ export default function AdminDashboardPage() {
 
           {/* Active Filter Indicators & Reset Button */}
           {isFilterActive && (
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 text-xs">
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 text-xs lg:col-span-2 xl:col-span-full">
               <div className="flex flex-wrap items-center gap-1.5 text-gray-500">
                 <span className="font-semibold text-gray-400">Active:</span>
                 {filterMaterial !== 'all' && (
@@ -612,9 +548,9 @@ export default function AdminDashboardPage() {
                     {filterMaterial === 'gold' ? 'Gold' : 'Silver'}
                   </span>
                 )}
-                {filterAudience !== 'all' && (
+                {filterSection !== 'all' && (
                   <span className="bg-blue-50 text-blue-800 px-2.5 py-0.5 rounded-full border border-blue-200 font-medium">
-                    {filterAudience === 'women' ? 'Women' : 'Men'}
+                    {getProductSectionLabel(filterSection)}
                   </span>
                 )}
                 {filterCategory !== 'all' && (
@@ -648,8 +584,8 @@ export default function AdminDashboardPage() {
         {/* Product Count Indicator */}
         <div className="flex items-center justify-between text-xs text-gray-500 px-1">
           <span>
-            Showing <strong className="text-gray-900">{filteredProducts.length}</strong> of{' '}
-            <strong className="text-gray-900">{products.length}</strong> products
+            Showing <strong className="text-gray-900">{Math.min(visibleProductCount, filteredProducts.length)}</strong> of{' '}
+            <strong className="text-gray-900">{filteredProducts.length}</strong> products
           </span>
 
           <button
@@ -704,11 +640,11 @@ export default function AdminDashboardPage() {
             <>
               {/* 1. Mobile Cards View (displayed on mobile screens without sliding) */}
               <div className="block md:hidden divide-y divide-[#F0EDE6] bg-white rounded-2xl border border-[#E5E1D8] shadow-xs overflow-hidden">
-                {filteredProducts.map((product) => {
+                {visibleProducts.map((product) => {
                   const isOperating = actionLoadingId === product.id;
                   const isGold = product.material === 'gold';
                   const isInStock = product.stockStatus === 'in_stock';
-                  const mainImage = product.images?.[0] || '/images/categories/Necklaces.png';
+                  const mainImage = product.images?.[0] || STATIC_MEDIA.fallbackNecklaces;
 
                   return (
                     <div key={product.id} className="p-4 space-y-3">
@@ -737,7 +673,7 @@ export default function AdminDashboardPage() {
                               {product.purity || (isGold ? '22K' : '92.5')} {isGold ? 'Gold' : 'Silver'}
                             </span>
                             <span className="text-[10px] font-medium text-gray-500 capitalize bg-gray-100 px-1.5 py-0.5 rounded">
-                              {product.audience === 'men' ? 'Men' : 'Women'}
+                              {getProductSectionLabel(product)}
                             </span>
                             {product.featured && (
                               <span className="text-[10px] font-semibold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200/60">
@@ -773,7 +709,7 @@ export default function AdminDashboardPage() {
                       <div className="flex items-center justify-between pt-2 border-t border-gray-100/80 gap-2">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="text-[11px] font-medium text-gray-700 bg-[#FAF9F6] px-2 py-0.5 rounded-lg border border-gray-200/60">
-                            {product.category}
+                            {product.category || '—'}
                           </span>
 
                           <span
@@ -852,11 +788,11 @@ export default function AdminDashboardPage() {
                   </thead>
 
                   <tbody className="divide-y divide-gray-100">
-                    {filteredProducts.map((product) => {
+                    {visibleProducts.map((product) => {
                       const isOperating = actionLoadingId === product.id;
                       const isGold = product.material === 'gold';
                       const isInStock = product.stockStatus === 'in_stock';
-                      const mainImage = product.images?.[0] || '/images/categories/Necklaces.png';
+                      const mainImage = product.images?.[0] || STATIC_MEDIA.fallbackNecklaces;
 
                       return (
                         <tr
@@ -917,7 +853,7 @@ export default function AdminDashboardPage() {
                                 {isGold ? 'Gold' : 'Silver'}
                               </span>
                               <span className="text-xs text-gray-500 font-medium capitalize">
-                                {product.audience === 'men' ? 'Men' : 'Women'}
+                                {getProductSectionLabel(product)}
                               </span>
                             </div>
                           </td>
@@ -925,7 +861,7 @@ export default function AdminDashboardPage() {
                           {/* Category Column */}
                           <td className="py-3.5 px-4">
                             <span className="text-xs font-medium text-gray-800 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-200/60">
-                              {product.category}
+                              {product.category || '—'}
                             </span>
                           </td>
 
@@ -1010,6 +946,18 @@ export default function AdminDashboardPage() {
             </>
           )}
         </div>
+
+        {filteredProducts.length > visibleProductCount && (
+          <div className="mt-5 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setVisibleProductCount((count) => count + 15)}
+              className="inline-flex items-center justify-center rounded-xl border border-[#C8102E]/25 bg-white px-5 py-2.5 text-sm font-semibold text-[#9B001F] shadow-sm transition hover:border-[#C8102E]/50 hover:bg-rose-50"
+            >
+              Load more products
+            </button>
+          </div>
+        )}
       </main>
 
       {/* Floating Success Notification */}
@@ -1455,7 +1403,7 @@ export default function AdminDashboardPage() {
                 <div className="flex items-center gap-1.5 mt-0.5 text-[11px] text-gray-500">
                   <span className="capitalize">{productToDelete.material}</span>
                   <span>•</span>
-                  <span>{productToDelete.category}</span>
+                  <span>{productToDelete.category || getProductSectionLabel(productToDelete)}</span>
                   {productToDelete.weightGrams ? (
                     <>
                       <span>•</span>
@@ -1510,6 +1458,6 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       )}
-    </div>
+    </AdminShell>
   );
 }

@@ -8,9 +8,10 @@ export const metadata = {
 
 export default function TermsOfServicePage() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen bg-skj-ivory/60">
 
-      <div className="section-container py-12 lg:py-20 max-w-4xl">
+      <div className="section-container max-w-4xl py-10 lg:py-16">
+        <div className="rounded-3xl border border-skj-gold/20 bg-white/95 p-6 shadow-[0_14px_35px_rgba(54,24,29,0.08)] sm:p-10">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-skj-charcoal mb-8" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
           Terms of Service
         </h1>
@@ -34,14 +35,14 @@ export default function TermsOfServicePage() {
             2. Orders and Payments
           </h2>
           <p>
-            Currently, our website serves as a digital catalogue. Orders can be placed by visiting our store in Ravulapalem or by contacting us via WhatsApp. Advance payments may be required for custom orders.
+            Currently, our website serves as a digital catalogue. Orders can be placed by visiting our store at Municipal Complex, M G Road, Patamata, Vijayawada or by contacting us via WhatsApp. Advance payments may be required for custom orders.
           </p>
 
           <h2 className="text-xl font-semibold text-skj-charcoal mt-10 mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
             3. Exchange and Returns
           </h2>
           <p>
-            We take pride in our authentic craftsmanship and certified purity. However, if you are unsatisfied with your purchase, please consult our store policies on exchanges and returns directly at our Ravulapalem branch, as conditions may vary based on the type of jewellery purchased.
+            We take pride in our authentic craftsmanship and certified purity. However, if you are unsatisfied with your purchase, please consult our store policies on exchanges and returns directly at our Vijayawada store, as conditions may vary based on the type of jewellery purchased.
           </p>
 
           <h2 className="text-xl font-semibold text-skj-charcoal mt-10 mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
@@ -50,6 +51,7 @@ export default function TermsOfServicePage() {
           <p>
             Sai Praveen Jewellery reserves the right to update or modify these Terms of Service at any time without prior notice.
           </p>
+        </div>
         </div>
       </div>
     </div>
