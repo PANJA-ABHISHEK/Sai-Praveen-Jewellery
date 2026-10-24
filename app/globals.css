@@ -137,6 +137,16 @@ img {
   background: #7E5312;
 }
 
+/* Keep modal scrolling usable without showing an intrusive scrollbar. */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* ═══════════════════════════════════════
    Custom utility classes
    ═══════════════════════════════════════ */

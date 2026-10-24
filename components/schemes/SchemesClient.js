@@ -201,7 +201,7 @@ function InterestModal({ scheme, submitted, onClose, onSubmitted }) {
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/45 px-4 py-6 backdrop-blur-sm" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-skj-gold/25 bg-white p-6 shadow-2xl sm:p-8" role="dialog" aria-modal="true" aria-labelledby="scheme-interest-title">
+      <div className="hide-scrollbar max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-skj-gold/25 bg-white p-6 shadow-2xl sm:p-8" role="dialog" aria-modal="true" aria-labelledby="scheme-interest-title">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-skj-olive">Scheme enquiry</p>
