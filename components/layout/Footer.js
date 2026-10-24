@@ -160,7 +160,7 @@ export default function Footer() {
           <p className="mt-1">
             Developed by{' '}
             <a
-              href="mailto:panjabhishek57@gmail.com"
+              href="mailto:panjaabhishek57@gmail.com"
               className="inline-flex items-center gap-1 transition-colors hover:text-white"
               title="Email Panja Abhishek"
             >
