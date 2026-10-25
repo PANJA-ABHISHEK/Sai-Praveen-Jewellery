@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Minus, Plus, ZoomIn } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function getPoint(event) {
   const bounds = event.currentTarget.getBoundingClientRect();
@@ -19,6 +19,29 @@ export default function ProductImageZoom({ src, alt }) {
   const [zoomLevel, setZoomLevel] = useState(2.5);
   const [magnifierActive, setMagnifierActive] = useState(false);
   const [point, setPoint] = useState({ x: 50, y: 50 });
+  const [imageReady, setImageReady] = useState(false);
+  const preloadRef = useRef(null);
+
+  // Preload the full-resolution image as soon as the component mounts
+  // so the magnifier background-image renders instantly on hover.
+  useEffect(() => {
+    if (!src) return;
+
+    setImageReady(false);
+
+    const img = new window.Image();
+    img.onload = () => setImageReady(true);
+    img.onerror = () => setImageReady(true); // still allow magnifier even on error
+    img.src = src;
+    preloadRef.current = img;
+
+    return () => {
+      if (preloadRef.current) {
+        preloadRef.current.onload = null;
+        preloadRef.current.onerror = null;
+      }
+    };
+  }, [src]);
 
   const updatePoint = (event) => setPoint(getPoint(event));
 
@@ -58,6 +81,17 @@ export default function ProductImageZoom({ src, alt }) {
         className="pointer-events-none object-cover"
         sizes="(max-width: 1024px) 100vw, 50vw"
         priority
+      />
+
+      {/* Hidden preload element — forces the browser to cache the full-res
+          image in memory so the magnifier background paints instantly. */}
+      <img
+        src={src}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 h-0 w-0 opacity-0"
+        loading="eager"
+        decoding="async"
       />
 
       <div className="absolute right-3 top-3 z-20 flex items-center gap-1 rounded-full border border-white/70 bg-white/90 p-1 text-skj-charcoal shadow-lg backdrop-blur-sm">
@@ -104,6 +138,8 @@ export default function ProductImageZoom({ src, alt }) {
             backgroundPosition: `${point.x}% ${point.y}%`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: `${zoomLevel * 100}% ${zoomLevel * 100}%`,
+            willChange: 'left, top, background-position',
+            contain: 'layout',
           }}
         />
       )}

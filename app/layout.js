@@ -62,12 +62,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <CartProvider>
-          <Navbar />
-          <main id="main-content">{children}</main>
-          <Footer />
-          <BusinessJsonLd />
-        </CartProvider>
+        <div style={{ overflowX: 'hidden', width: '100%' }}>
+          <CartProvider>
+            <Navbar />
+            <main id="main-content">{children}</main>
+            <Footer />
+            <BusinessJsonLd />
+          </CartProvider>
+        </div>
       </body>
     </html>
   );

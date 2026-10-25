@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
 
@@ -14,6 +14,7 @@ export default function HeroSlider() {
   // by the current Cloudinary slides.
   const [slides, setSlides] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const preloadedRef = useRef(new Set());
 
   useEffect(() => {
     let cancelled = false;
@@ -31,6 +32,24 @@ export default function HeroSlider() {
               (slide) => slide?.id && (slide?.imageUrl || slide?.mobileImageUrl),
             )
           : [];
+
+        // Preload the first slide images immediately for instant display
+        if (nextSlides.length > 0) {
+          const first = nextSlides[0];
+          const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+          const preloadSrc = isMobile
+            ? (first.mobileImageUrl || first.imageUrl)
+            : first.imageUrl;
+
+          if (preloadSrc && !preloadedRef.current.has(preloadSrc)) {
+            preloadedRef.current.add(preloadSrc);
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = preloadSrc;
+            document.head.appendChild(link);
+          }
+        }
 
         if (!cancelled) {
           setSlides(nextSlides);
@@ -56,7 +75,8 @@ export default function HeroSlider() {
   if (isLoading) {
     return (
       <section
-        className="relative aspect-[16/9] w-full overflow-hidden bg-[#26171B] md:aspect-[12/5]"
+        className="relative w-full overflow-hidden bg-[#26171B]"
+        style={{ aspectRatio: '16 / 9' }}
         aria-label="Loading featured jewellery collections"
         aria-busy="true"
       />
@@ -70,11 +90,10 @@ export default function HeroSlider() {
   const hasMultipleSlides = slides.length > 1;
 
   return (
-    <section className="relative" aria-label="Featured jewellery collections">
+    <section className="relative overflow-hidden" aria-label="Featured jewellery collections">
       <Swiper
         modules={[Pagination, Autoplay, EffectFade]}
         effect="fade"
-        autoHeight
         speed={700}
         loop={hasMultipleSlides}
         autoplay={hasMultipleSlides ? {
@@ -89,6 +108,7 @@ export default function HeroSlider() {
           bulletActiveClass: 'hero-bullet-active',
         }}
         className="hero-swiper"
+        style={{ overflow: 'hidden' }}
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={slide.id}>
@@ -103,7 +123,8 @@ export default function HeroSlider() {
                   src={slide.imageUrl}
                   alt={slide.alt || 'Sai Praveen Jewellery collection'}
                   className="block h-auto w-full"
-                  decoding="async"
+                  style={{ willChange: index === 0 ? 'auto' : 'opacity' }}
+                  decoding={index === 0 ? 'sync' : 'async'}
                   draggable="false"
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   loading={index === 0 ? 'eager' : 'lazy'}
@@ -117,6 +138,13 @@ export default function HeroSlider() {
       <style jsx global>{`
         .hero-swiper {
           width: 100%;
+          overflow: hidden;
+        }
+        .hero-swiper .swiper-wrapper {
+          will-change: transform;
+        }
+        .hero-swiper .swiper-slide {
+          overflow: hidden;
         }
         .hero-swiper .swiper-pagination {
           bottom: 18px !important;
